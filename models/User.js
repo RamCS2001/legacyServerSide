@@ -4,6 +4,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    gender: {
+        type: String,
+        required: true
+    },
     email: {
         type: String,
         required: true,
@@ -39,6 +43,10 @@ const UserSchema = new mongoose.Schema({
         default: false
     },
     accommodationRequirement: {
+        type: Boolean,
+        default: false
+    },
+    accommodationRequirementSubmitted: {
         type: Boolean,
         default: false
     },

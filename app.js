@@ -21,6 +21,7 @@ app.use(cors());
 
 const User = require('./models/User');
 const groupEvents = require('./models/groupEvents');
+const count= require('./models/count');
 
 app.get('/', (req,res)=>{
     res.send("hello")
@@ -53,15 +54,40 @@ app.post('/createuser',(req,res)=>{
                 res.json ( { message: 3 } ) //message 3 for duplicate phone_number
             }
             else {
-                User.create ( req.body , ( error , responseUser ) => {
-                   if ( error ) {
-                     res.json ( { message: 0 } )
-                     console.log ( error )
-                     return
-                   }
-                   console.log ( responseUser )
-                   res.json ( { message: 1 } )   //message 1 registration successfull
-                } )
+                let college_name;
+                if(req.body.college==="other"){
+                    college_name= req.body.otherCollege;
+                }
+                else{
+                    college_name= req.body.college;
+                }
+                count.findOne({college: college_name}, (err,doc)=>{
+                    if(err) return err;
+                    if(doc){
+                        newCount = doc.numberOfParticipants+1
+                        if(newCount-1>=50){
+                            res.json ( { message: 4 } )   //message 4 college permit count exceed
+                            return
+                        }
+                        count.findByIdAndUpdate(doc._id, {numberOfParticipants: newCount}, (err, docs)=>{
+                            if(err) return err;
+                        })
+                    }
+                    else{
+                        count.create({college: college_name, numberOfParticipants: 1}, (err, docs)=>{
+                            if(err) return err;
+                        })
+                    }
+                    User.create ( req.body , ( error , responseUser ) => {
+                        if ( error ) {
+                            res.json ( { message: 0 } )
+                            console.log ( error )
+                            return
+                        }
+                        console.log ( responseUser )
+                        if(responseUser) res.json ( { message: 1 } )   //message 1 registration successfull
+                    } )
+                })
             }
           } ) 
         }
