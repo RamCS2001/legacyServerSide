@@ -9,12 +9,7 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    roll_number: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    admission_number: {
+    phone_number: {
         type: String,
         required: true,
         unique: true,
@@ -23,7 +18,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    year: {
+    college: {
+        type: String,
+        required: true,
+    },
+    degree: {
         type: String,
         required: true,
     },
@@ -31,9 +30,17 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    section: {
-        type: String,
-        required: true,
+    regFeesPayment: {
+        type: Boolean,
+        default: false
+    },
+    accommodationRequirement: {
+        type: Boolean,
+        default: false
+    },
+    accommodationFeesPayment: {
+        type: Boolean,
+        default: false
     },
     asyoulikeit: {
         type: Number,

@@ -3,10 +3,10 @@ const participant= new mongoose.Schema({
     name: {
         type: String
     },
-    admission_number: {
+    phone_number: {
         type: String
     },
-    roll_number: {
+    email: {
         type: String
     }
 })

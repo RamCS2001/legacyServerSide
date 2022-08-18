@@ -9,14 +9,10 @@ var cors = require('cors');
 
 const app = express();
 
-// mongoose.connect('[connectionUrl]');
-// const db = mongoose.connection;
-// db.on('error',(error)=> console.log("Error in connecting to database"));
-// db.once('open',()=> console.log("Connected to database"))
-
-
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
+mongoose.connect(process.env.MONGODB_URL);
+const db = mongoose.connection;
+db.on('error',(error)=> console.log("Error in connecting to database"));
+db.once('open',()=> console.log("Connected to database"))
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
@@ -25,11 +21,6 @@ app.use(cors());
 
 const User = require('./models/User');
 const groupEvents = require('./models/groupEvents');
-const unregistered = require('./models/unregistered');
-
-
-const { resolve } = require('path');
-const { response } = require('express');
 
 app.get('/', (req,res)=>{
     res.send("hello")
