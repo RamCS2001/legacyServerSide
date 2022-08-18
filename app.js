@@ -28,119 +28,44 @@ app.get('/', (req,res)=>{
 
 app.post('/createuser',(req,res)=>{
     res.setHeader("Access-Control-Allow-Origin","*");
-    // console.log(req.body);
-    req.body.roll_number = req.body.roll_number.toUpperCase();
-    User.findOne({ email: req.body.email }, function (err, user) {
-        if (err) {
-            console.log("Error in finding user in signing up");
-            res.json({message: -1}); // -1 -> Error
-            return;
+    let email = req.body.email
+    let phone_number = req.body.phone_number
+    console.log ( req.body )
+    User.findOne ( { email : email } , ( error , responseUser ) => {
+        if ( error ) {
+            console.log ( error )
+            res.json ( { message : 0 } ) //always message 0 for error
+            return
         }
-        if (!user) {
-            User.findOne({ admission_number: req.body.admission_number }, function (err, user) {
-                if (err) {
-                    console.log("Error in finding user in signing up");
-                    res.json({message: -1}); // -1 -> Error
-                    return;
-                }
-                if(!user){
-                    User.findOne({ roll_number: req.body.roll_number }, function (err, user) {
-                        if (err) {
-                            console.log("Error in finding user in signing up");
-                            res.json({message: -1}); // -1 -> Error
-                            return;
-                        }
-                        if(!user){
-                            User.create(req.body, function (err, user) {
-                                if (err) {
-                                    console.log("Error in creating user in signing up");
-                                    console.log(err);
-                                    res.json({message: -1});
-                                    return;
-                                }
-                                // console.log("User: ", user);
-                            });
-                            unregistered.findOne({admission_number: req.body.admission_number}, function(err, unRegUser){
-                                if(err){
-                                    onsole.log("Error in finding user in signing up");
-                                    res.json({message: -1}); // -1 -> Error
-                                    return;
-                                }
-                                if(unRegUser){
-                                    // console.log(unRegUser)
-                                    const filter= {admission_number: req.body.admission_number}
-                                    let update
-                                    if(unRegUser.event==9){
-                                        update= {$set: {divideandconquer: 1}}
-                                    }
-                                    if(unRegUser.event==10){
-                                        update= {$set: {tressurehunt: 1}}
-                                    }
-                                    if(unRegUser.event==11){
-                                        update= {$set: {themissingpiece: 1}}
-                                    }
-                                    if(unRegUser.event==12){
-                                        update= {$set: {radiomirchi: 1}}
-                                    }
-                                    if(unRegUser.event==13){
-                                        update= {$set: {englishpotpourri: 1}}
-                                    }
-                                    if(unRegUser.event==14){
-                                        update= {$set: {lyricalhunt: 1}}
-                                    }
-                                    if(unRegUser.event==15){
-                                        update= {$set: {tamilpotpourri: 1}}
-                                    }
-                                    if(unRegUser.event==16){
-                                        update= {$set: {cinmatrix: 1}}
-                                    }
-                                    if(unRegUser.event==17){
-                                        update= {$set: {quiz: 1}}
-                                    }
-                                    if(unRegUser.event==18){
-                                        update= {$set: {groupdance: 1}}
-                                    }
-                                    if(unRegUser.event==19){
-                                        update= {$set: {postermaking: 1}}
-                                    }
-                                    if(unRegUser.event==20){
-                                        update= {$set: {rangoli: 1}}
-                                    }
-                                    if(unRegUser.event==21){
-                                        update= {$set: {dramatix: 1}}
-                                    }
-                                    
-                                    User.findOneAndUpdate(filter, update, function (err, docs){
-                                        if (err){
-                                            console.log(err)
-                                            return
-                                        }
-                                        res.json({message: 1});
-                                        return
-                                    })    
-                                    
-                                }else{
-                                    res.json({message: 1});
-                                    return
-                                }
-                            })
-                        }
-                        else{
-                            res.json({message: -3}); //-3->  roll number Already exist
-                            return;
-                        }
-                    })
-                }
-                else{
-                    res.json({message: -2}); //-2->  Admin number Already exist
-                    return;
-                }
-            })
-        } else {
-            res.json({message: 0}); //0 -> User Already exist
-            return;
+        if ( responseUser ) { // user already exists with mailId 
+         console.log ( "emailId already used" )
+         res.json ( { message: 2 } ) //message 2 for duplicate mailId
         }
-      });
+        else {
+          User.findOne ( { phone_number : phone_number } , ( error , responseUser ) => {
+            if ( error ) {
+                console.log ( error )
+                res.json ( { message: 0 } )
+                return
+            }
+            if ( responseUser ) { //user already exists with the phone_number
+                console.log ( "phone number already taken!" )
+                res.json ( { message: 3 } ) //message 3 for duplicate phone_number
+            }
+            else {
+                User.create ( req.body , ( error , responseUser ) => {
+                   if ( error ) {
+                     res.json ( { message: 0 } )
+                     console.log ( error )
+                     return
+                   }
+                   console.log ( responseUser )
+                   res.json ( { message: 1 } )   //message 1 registration successfull
+                } )
+            }
+          } ) 
+        }
+    } )
 });
 
 
@@ -149,20 +74,18 @@ app.post('/loginuser',(req,res)=>{
     User.findOne({ email: req.body.email }, function (err, user) {
         if (err) {
             console.log("Error in Login module");
-            res.json({message: -1}); // -1 -> Error
+            res.json({message: 0  }); // 0 -> Error
             return;
         }
         if (!user) {
-            res.json({message: -2}); //0 -> User does not exist
+            res.json({message: 2}); //0 -> User does not exist
             return
         } 
         else {
             if(req.body.password==user.password){
                 const username = user.name;
                 const userId = user._id;
-                const adminNo= user.admission_number;
-                const rollno= user.roll_number;
-                const userDetails= {id: userId, admission_number: adminNo, roll_number: rollno};
+                const userDetails= {id: userId, phone_number: user.phone_number, email: user.email};
                 // console.log(userDetails)
                 const accessToken = jwt.sign(userDetails, process.env.ACCESS_TOKEN, {expiresIn: '600s'})
                 // res.json({message: 1,token: accessToken});
@@ -172,11 +95,10 @@ app.post('/loginuser',(req,res)=>{
                     idToken: accessToken, 
                     expiresIn: 600
                 });
-                // res.json({message: 1, name: userDetails});
                 return;
             }
             else{
-                res.json({message: 0}); // invalid credentials 
+                res.json({message: 3}); // invalid credentials 
                 return;
             }
         }
@@ -187,10 +109,10 @@ app.get('/getuserdetails',authenticateToken  ,(req,res)=>{
     const id = payload.id;
     User.findOne({_id: id}, function (err, user){
         if(err){
-            return res.json({message: -2})// erroe contact admin
+            return res.json({message: 0})// erroe contact admin
         }
         if(!user){
-            return res.json({message: -2})// erroe contact admin // no user 
+            return res.json({message: 0})// erroe contact admin // no user 
         }
         else{
             // console.log(user);
@@ -266,6 +188,7 @@ app.get('/getuserdetails',authenticateToken  ,(req,res)=>{
                 email: user.email,
                 yourEvents: yourEvents
             }
+            console.log ( userDetail )
             res.json({message: 1,userDetails: userDetail})
         }
     })
@@ -455,9 +378,11 @@ app.post('/participates', authenticateToken, (req, res)=>{
 })
 
 app.get('/Individuallist', authenticateToken, (req, res)=>{
-    if(payload.admission_number!="aaaaa"){
+    if(payload.phone_number!="9944446591"){
+        console.log ( "condition satisfied" )
+        console.log ( payload )
         res.json({message: -1});
-    }
+    }   
     else{
         let filter
         if(req.query.event=='0'){
