@@ -515,11 +515,13 @@ app.get('/checkCollegeParticipation', authenticateToken, (req,res)=>{
     collegeEvents.findOne({college: college_name}, (err,doc)=>{
         if(err) return err;
         if(doc){
-            if(doc[req.query.event]==1){
-                res.json({message: 1})
-                return
-            }
-            res.json({message: 2})
+            // if(doc[req.query.event]){
+            //     res.json({message: 1})
+            //     return
+            // }
+            // res.json({message: 2})
+
+            res.json({message: 1, currentCount: doc[req.query.event]});
         }
         else{
             res.json({message: -1})
