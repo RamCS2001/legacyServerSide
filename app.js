@@ -22,6 +22,7 @@ app.use(cors());
 const User = require('./models/User');
 const groupEvents = require('./models/groupEvents');
 const count= require('./models/count');
+const collegeEvents = require('./models/collegeEvents');
 
 app.get('/', (req,res)=>{
     res.send("hello")
@@ -85,7 +86,14 @@ app.post('/createuser',(req,res)=>{
                             return
                         }
                         console.log ( responseUser )
-                        if(responseUser) res.json ( { message: 1 } )   //message 1 registration successfull
+                        collegeEvents.create({college: college_name}, (err,clg)=>{
+                            if(err) {
+                                res.json ( { message: 0 } )
+                                console.log ( error )
+                                return
+                            }
+                            if(clg) res.json ( { message: 1 } )   //message 1 registration successfull
+                        })
                     } )
                 })
             }
@@ -111,7 +119,14 @@ app.post('/loginuser',(req,res)=>{
             if(req.body.password==user.password){
                 const username = user.name;
                 const userId = user._id;
-                const userDetails= {id: userId, phone_number: user.phone_number, email: user.email};
+                let college_name;
+                if(user.college==="other"){
+                    college_name= user.otherCollege;
+                }
+                else{
+                    college_name= user.college;
+                }
+                const userDetails= {id: userId, phone_number: user.phone_number, email: user.email, college: college_name};
                 // console.log(userDetails)
                 const accessToken = jwt.sign(userDetails, process.env.ACCESS_TOKEN, {expiresIn: '600s'})
                 // res.json({message: 1,token: accessToken});
@@ -493,7 +508,23 @@ app.get('/all',authenticateToken, (req,res)=>{
         if(err) return
         res.json({message: 1,data: docs})
     })
+})
 
+app.get('/checkCollegeParticipation', authenticateToken, (req,res)=>{
+    college_name= payload.college;
+    collegeEvents.findOne({college: college_name}, (err,doc)=>{
+        if(err) return err;
+        if(doc){
+            if(doc[req.query.event]==1){
+                res.json({message: 1})
+                return
+            }
+            res.json({message: 2})
+        }
+        else{
+            res.json({message: -1})
+        }
+    })
 })
 const port = process.env.PORT || 5000;
 app.listen(port,()=>{ console.log("Server @ ",port)});

@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const countSchema = new mongoose.Schema({
     college: {
-        type: String
+        type: String,
+        required: true,
     },
     numberOfParticipants: {
         type: Number,
