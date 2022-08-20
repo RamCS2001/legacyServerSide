@@ -9,7 +9,7 @@ var cors = require('cors');
 
 const app = express();
 
-mongoose.connect(process.env.MONGODB_URL);
+mongoose.connect(process.env.LOCAL_MONGODB_URL);
 const db = mongoose.connection;
 db.on('error',(error)=> console.log("Error in connecting to database"));
 db.once('open',()=> console.log("Connected to database"))
@@ -86,14 +86,22 @@ app.post('/createuser',(req,res)=>{
                             return
                         }
                         console.log ( responseUser )
-                        collegeEvents.create({college: college_name}, (err,clg)=>{
-                            if(err) {
-                                res.json ( { message: 0 } )
-                                console.log ( error )
-                                return
-                            }
+                        collegeEvents.findOne({college: college_name}, (err,clg)=>{
+                            if(err) return err
+                            
                             if(clg) res.json ( { message: 1 } )   //message 1 registration successfull
+                            else{
+                                collegeEvents.create({college: college_name}, (err,newClg)=>{
+                                    if(err) {
+                                        res.json ( { message: 0 } )
+                                        console.log ( error )
+                                        return
+                                    }
+                                    if(newClg) res.json ( { message: 1 } )   //message 1 registration successfull
+                                })
+                            }
                         })
+                        
                     } )
                 })
             }
@@ -253,15 +261,14 @@ function authenticateToken(req, res, next) {
 
 
 app.post('/participate', authenticateToken, async function (req,res){
-    adminNo= payload.admission_number;
-    rollno= payload.roll_number;
-    req.body.roll_number = req.body.roll_number.toUpperCase();
+    mail= payload.email;
+    phoneNo= payload.phone_number;
 
-    if(adminNo!=req.body.admission_number){
+    if(mail!=req.body.email){
         res.json({message: -2}) //differnt user with differnt adminno
         return
     }
-    if(rollno!=req.body.roll_number){
+    if(phoneNo!=req.body.phone_number){
         res.json({message: -3}) //differnt user with differnt rollno
         return
     }
@@ -302,9 +309,50 @@ app.post('/participate', authenticateToken, async function (req,res){
             return
         }
         else{
-            // console.log(docs)
-            res.json({message: 1});
-            return;
+            let college_name = payload.college;
+            collegeEvents.findOne({college: college_name}, (err,clg)=>{
+                if(err) return err;
+                if(clg) {
+                    console.log(clg)
+                    currentCount = clg[req.body.serverName];
+                    if(req.body.serverName=="asyoulikeit"){
+                        eventToUpdate={asyoulikeit: currentCount+1}
+                    }
+                    if(req.body.serverName=="bestmanager"){
+                        eventToUpdate={bestmanager: currentCount+1}
+                    }
+                    if(req.body.serverName=="solosinging"){
+                        eventToUpdate={solosinging: currentCount+1}
+                    }
+                    if(req.body.serverName=="solodance"){
+                        eventToUpdate={solodance: currentCount+1}
+                    }
+                    if(req.body.serverName=="soloinstrumental"){
+                        eventToUpdate={soloinstrumental: currentCount+1}
+                    }
+                    if(req.body.serverName=="pixie"){
+                        eventToUpdate={pixie: currentCount+1}
+                    }
+                    if(req.body.serverName=="pencilsketching"){
+                        eventToUpdate={pencilsketching: currentCount+1}
+                    }
+                    if(req.body.serverName=="yoga"){
+                        eventToUpdate={yoga: currentCount+1}
+                    }
+                    if(req.body.serverName=="ezhuthaani"){
+                        eventToUpdate={ezhuthaani: currentCount+1}
+                    }
+                    console.log(eventToUpdate)
+                    collegeEvents.findByIdAndUpdate(clg._id, eventToUpdate, (err, newClg)=>{
+                        if(err) return err;
+                        if(newClg) {
+                            console.log(newClg)
+                            res.json({message: 1});
+                            return;
+                        }
+                    })
+                }
+            })
         }
     });
 });
