@@ -313,7 +313,6 @@ app.post('/participate', authenticateToken, async function (req,res){
             collegeEvents.findOne({college: college_name}, (err,clg)=>{
                 if(err) return err;
                 if(clg) {
-                    console.log(clg)
                     currentCount = clg[req.body.serverName];
                     if(req.body.serverName=="asyoulikeit"){
                         eventToUpdate={asyoulikeit: currentCount+1}
@@ -342,7 +341,6 @@ app.post('/participate', authenticateToken, async function (req,res){
                     if(req.body.serverName=="ezhuthaani"){
                         eventToUpdate={ezhuthaani: currentCount+1}
                     }
-                    console.log(eventToUpdate)
                     collegeEvents.findByIdAndUpdate(clg._id, eventToUpdate, (err, newClg)=>{
                         if(err) return err;
                         if(newClg) {
@@ -357,32 +355,64 @@ app.post('/participate', authenticateToken, async function (req,res){
     });
 });
 
-app.post('/participates', authenticateToken, (req, res)=>{
-    if(req.body.event==10) return res.json({message: "Closed"});
-    // console.log(req.body)
-    adminNo= payload.admission_number;
-    rollno= payload.roll_number;
-    req.body.participants["0"].roll_number = req.body.participants["0"].roll_number.toUpperCase();
+app.post('/CheckAllParticipants', authenticateToken, async (req,res)=>{
 
-    if(adminNo!=req.body.participants["0"].admission_number){
-        res.json({message: -2}) //differnt user with differnt adminno
+    mail= payload.email;
+    phoneNo= payload.phone_number;
+
+    if(mail!=req.body["0"].email){
+        res.json({message: -2}) //different user with differnt mail
         return
     }
-    if(rollno!=req.body.participants["0"].roll_number){
-        res.json({message: -3}) //differnt user with differnt rollno
+    if(phoneNo!=req.body["0"].phone_number){
+        res.json({message: -3}) //different user with differnt phonenumber
         return
     }
+
+    console.log(req.body["0"].email)
+    let count=0
+    let unRegUser=[]
+    let i;
+    for( i=0; i<req.body.length; i++){
+        const filter={ email: req.body[i].email}
+        let user = await User.findOne(filter)
+        if(!user){
+            console.log(i)
+            unRegUser.push(i+1)
+            console.log(unRegUser)
+
+        }
+        else{
+            count++
+        }
+        if( i==req.body.length-1 && count<req.body.length ){
+            res.json({message: -6, users: unRegUser})
+            return
+        }
+        if(i==req.body.length-1 && count==req.body.length){
+            res.json({message: 1})
+            return
+        }
+
+        
+    }
+})
+
+app.post('/participates', authenticateToken, (req, res)=>{
     let obj={exist: 0}
+    req.body.teamname = req.body.teamname.toUpperCase();
+
     groupEvents.findOne({teamname: req.body.teamname, event: req.body.event} ,function (err, team) {
         if (err) {
             console.log("Error in Login module");
-            res.json({message: -1}); // -1 -> Error
+            res.json({message: -4}); // -1 -> Error
             return;
         }
         if (team) {
             obj.exist=1;
             res.json({message: -5}) // team name already exist
         } 
+
         else{
             let update
             if(req.body.event==9){
@@ -426,28 +456,13 @@ app.post('/participates', authenticateToken, (req, res)=>{
             }
             
             for(let i=0; i<req.body.participants.length; i++){
-                const filter={ admission_number: req.body.participants[i].admission_number}
+                const filter={ email: req.body.participants[i].email}
         
                 User.findOneAndUpdate(filter, update, function (err, docs){
                     if (err){
                         console.log(err)
                         return
-                    }
-                    // console.log(docs)
-                    if(docs==null){
-                        const unregUser= { admission_number: req.body.participants[i].admission_number, event: req.body.event}
-                        // console.log(unregUser);
-
-                        unregistered.create(unregUser, function(err,doc){
-                            if (err) {
-                                console.log("Error");
-                                console.log(err);
-                                res.json({message: -1});
-                                return;
-                            }
-                        })
-
-                    }
+                    }                    
                 });
             }
             
@@ -455,12 +470,64 @@ app.post('/participates', authenticateToken, (req, res)=>{
                 if (err) {
                     console.log("Error");
                     console.log(err);
-                    res.json({message: -1});
+                    res.json({message: -4});
                     return;
                 }
-                // console.log("Doc: ", doc);
+                else{
+                    let college_name = payload.college;
+                    collegeEvents.findOne({college: college_name}, (err,clg)=>{
+                        if(err) return err;
+                        if(clg) {
+                            console.log(clg)
+                            let eventToUpdate
+                            currentCount = clg[req.body.serverName];
+                            console.log(currentCount)
 
-                res.json({message: 1});
+                            if(req.body.serverName=="asyoulikeit"){
+                                eventToUpdate={asyoulikeit: currentCount+1}
+                            }
+                            if(req.body.serverName=="bestmanager"){
+                                eventToUpdate={bestmanager: currentCount+1}
+                            }
+                            if(req.body.serverName=="solosinging"){
+                                eventToUpdate={solosinging: currentCount+1}
+                            }
+                            if(req.body.serverName=="solodance"){
+                                eventToUpdate={solodance: currentCount+1}
+                            }
+                            if(req.body.serverName=="soloinstrumental"){
+                                eventToUpdate={soloinstrumental: currentCount+1}
+                            }
+                            if(req.body.serverName=="pixie"){
+                                eventToUpdate={pixie: currentCount+1}
+                            }
+                            if(req.body.serverName=="pencilsketching"){
+                                eventToUpdate={pencilsketching: currentCount+1}
+                            }
+                            if(req.body.serverName=="yoga"){
+                                eventToUpdate={yoga: currentCount+1}
+                            }
+                            if(req.body.serverName=="ezhuthaani"){
+                                eventToUpdate={ezhuthaani: currentCount+1}
+                            }
+                            if(req.body.serverName=="quiz"){
+                                eventToUpdate={quiz: currentCount+1}
+                            }
+                            if(req.body.serverName=="postermaking"){
+                                eventToUpdate={postermaking: currentCount+1}
+                            }
+                            console.log(eventToUpdate)
+                            collegeEvents.findByIdAndUpdate(clg._id, eventToUpdate, (err, newClg)=>{
+                                if(err) return err;
+                                if(newClg) {
+                                    console.log(newClg)
+                                    res.json({message: 1});
+                                    return;
+                                }
+                            })
+                        }
+                    })
+                }
             });
         }
     })
@@ -563,12 +630,6 @@ app.get('/checkCollegeParticipation', authenticateToken, (req,res)=>{
     collegeEvents.findOne({college: college_name}, (err,doc)=>{
         if(err) return err;
         if(doc){
-            // if(doc[req.query.event]){
-            //     res.json({message: 1})
-            //     return
-            // }
-            // res.json({message: 2})
-
             res.json({message: 1, currentCount: doc[req.query.event]});
         }
         else{
