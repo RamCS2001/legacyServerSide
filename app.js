@@ -134,7 +134,7 @@ app.post('/loginuser',(req,res)=>{
                 else{
                     college_name= user.college;
                 }
-                const userDetails= {id: userId, phone_number: user.phone_number, email: user.email, college: college_name};
+                const userDetails= {id: userId, phone_number: user.phone_number, email: user.email, college: college_name, gender: user.gender};
                 // console.log(userDetails)
                 const accessToken = jwt.sign(userDetails, process.env.ACCESS_TOKEN, {expiresIn: '600s'})
                 // res.json({message: 1,token: accessToken});
@@ -369,7 +369,6 @@ app.post('/CheckAllParticipants', authenticateToken, async (req,res)=>{
         return
     }
 
-    console.log(req.body["0"].email)
     let count=0
     let unRegUser=[]
     let i;
@@ -383,6 +382,14 @@ app.post('/CheckAllParticipants', authenticateToken, async (req,res)=>{
 
         }
         else{
+            if( payload.gender=='M' && user["gender"]=='F'){
+                res.json({message: -7})
+                return
+            }
+            else if(payload.gender=='F' && user["gender"]=='M'){
+                res.json({message: -7})
+                return
+            }
             count++
         }
         if( i==req.body.length-1 && count<req.body.length ){
@@ -627,9 +634,11 @@ app.get('/all',authenticateToken, (req,res)=>{
 
 app.get('/checkCollegeParticipation', authenticateToken, (req,res)=>{
     college_name= payload.college;
+    console.log(college_name)
     collegeEvents.findOne({college: college_name}, (err,doc)=>{
         if(err) return err;
         if(doc){
+            console.log(doc)
             res.json({message: 1, currentCount: doc[req.query.event]});
         }
         else{
