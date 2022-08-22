@@ -9,7 +9,7 @@ var cors = require('cors');
 
 const app = express();
 
-mongoose.connect(process.env.MONGODB_URL);
+mongoose.connect(process.env.LOCAL_MONGODB_URL);
 const db = mongoose.connection;
 db.on('error',(error)=> console.log("Error in connecting to database"));
 db.once('open',()=> console.log("Connected to database"))
@@ -228,16 +228,22 @@ app.get('/getuserdetails',authenticateToken  ,(req,res)=>{
             let replaced= events.replace(/&/g, ",");
             let yourEvents= replaced.replace(/.$/,".")
             // console.log(yourEvents)
+            let college_name
+            if(user.college==="other"){
+                college_name= user.otherCollege;
+            }
+            else{
+                college_name= user.college;
+            }
             const userDetail = {    
-                year: user.year,
+                college: college_name,
+                degree: user.degree,
                 department: user.department,
-                section: user.section,
-                roll_number: user.roll_number,
-                admission_number: user.admission_number,
+                year: user.year,
+                phone_number: user.phone_number,
                 email: user.email,
                 yourEvents: yourEvents
             }
-            console.log ( userDetail )
             res.json({message: 1,userDetails: userDetail})
         }
     })
@@ -490,38 +496,44 @@ app.post('/participates', authenticateToken, (req, res)=>{
                             currentCount = clg[req.body.serverName];
                             console.log(currentCount)
 
-                            if(req.body.serverName=="asyoulikeit"){
-                                eventToUpdate={asyoulikeit: currentCount+1}
+                            if(req.body.serverName=="divideandconquer"){
+                                eventToUpdate={divideandconquer: currentCount+1}
                             }
-                            if(req.body.serverName=="bestmanager"){
-                                eventToUpdate={bestmanager: currentCount+1}
+                            if(req.body.serverName=="treasurehunt"){
+                                eventToUpdate={treasurehunt: currentCount+1}
                             }
-                            if(req.body.serverName=="solosinging"){
-                                eventToUpdate={solosinging: currentCount+1}
+                            if(req.body.serverName=="themissingpiece"){
+                                eventToUpdate={themissingpiece: currentCount+1}
                             }
-                            if(req.body.serverName=="solodance"){
-                                eventToUpdate={solodance: currentCount+1}
+                            if(req.body.serverName=="radiomirchi"){
+                                eventToUpdate={radiomirchi: currentCount+1}
                             }
-                            if(req.body.serverName=="soloinstrumental"){
-                                eventToUpdate={soloinstrumental: currentCount+1}
+                            if(req.body.serverName=="englishpotpourri"){
+                                eventToUpdate={englishpotpourri: currentCount+1}
                             }
-                            if(req.body.serverName=="pixie"){
-                                eventToUpdate={pixie: currentCount+1}
+                            if(req.body.serverName=="lyricalhunt"){
+                                eventToUpdate={lyricalhunt: currentCount+1}
                             }
-                            if(req.body.serverName=="pencilsketching"){
-                                eventToUpdate={pencilsketching: currentCount+1}
+                            if(req.body.serverName=="tamilpotpourri"){
+                                eventToUpdate={tamilpotpourri: currentCount+1}
                             }
-                            if(req.body.serverName=="yoga"){
-                                eventToUpdate={yoga: currentCount+1}
+                            if(req.body.serverName=="cinmatrix"){
+                                eventToUpdate={cinmatrix: currentCount+1}
                             }
-                            if(req.body.serverName=="ezhuthaani"){
-                                eventToUpdate={ezhuthaani: currentCount+1}
+                            if(req.body.serverName=="groupdance"){
+                                eventToUpdate={groupdance: currentCount+1}
                             }
                             if(req.body.serverName=="quiz"){
                                 eventToUpdate={quiz: currentCount+1}
                             }
                             if(req.body.serverName=="postermaking"){
                                 eventToUpdate={postermaking: currentCount+1}
+                            }
+                            if(req.body.serverName=="rangoli"){
+                                eventToUpdate={rangoli: currentCount+1}
+                            }
+                            if(req.body.serverName=="dramatix"){
+                                eventToUpdate={dramatix: currentCount+1}
                             }
                             console.log(eventToUpdate)
                             collegeEvents.findByIdAndUpdate(clg._id, eventToUpdate, (err, newClg)=>{

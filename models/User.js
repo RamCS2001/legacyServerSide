@@ -30,6 +30,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    year: {
+        type: String,
+        required: true,
+    },
     degree: {
         type: String,
         required: true,
