@@ -9,7 +9,7 @@ var cors = require('cors');
 
 const app = express();
 
-mongoose.connect(process.env.LOCAL_MONGODB_URL);
+mongoose.connect(process.env.MONGODB_URL);
 const db = mongoose.connection;
 db.on('error',(error)=> console.log("Error in connecting to database"));
 db.once('open',()=> console.log("Connected to database"))
