@@ -1,62 +1,8 @@
 const mongoose = require('mongoose');
-const UserSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-    },
-    gender: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    phone_number: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
+const collegeEventsSchema = new mongoose.Schema({
     college: {
         type: String,
         required: true,
-    },
-    otherCollege: {
-        type: String,
-        required: false
-    },
-    year: {
-        type: String,
-        required: true,
-    },
-    degree: {
-        type: String,
-        required: true,
-    },
-    department: {
-        type: String,
-        required: true,
-    },
-    regFeesPayment: {
-        type: Boolean,
-        default: false
-    },
-    accommodationRequirement: {
-        type: Boolean,
-        default: false
-    },
-    accommodationRequirementSubmitted: {
-        type: Boolean,
-        default: false
-    },
-    accommodationFeesPayment: {
-        type: Boolean,
-        default: false
     },
     asyoulikeit: {
         type: Number,
@@ -146,11 +92,7 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    date:{
-        type: Date,
-        default: Date.now
-    }
 });
 
-const User= mongoose.model('User',UserSchema);
-module.exports = User;
+const collegeEvents= mongoose.model('collegeEvents',collegeEventsSchema);
+module.exports = collegeEvents;
