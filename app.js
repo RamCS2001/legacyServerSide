@@ -1,5 +1,5 @@
 require('dotenv').config()
-
+const https = require ( "https" )
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -109,7 +109,14 @@ app.post('/createuser',(req,res)=>{
         }
     } )
 });
-
+app.post ( "/payment_status" , ( req , res ) => {
+    res.send ( "success" )
+    console.log ( "method called" )
+} )
+app.post ( "/pay" , ( req ) => {
+    amount = req.body.amount
+    https.post ( "https://secure.payu.in/_payment" , { key: process.env.MERCHANT_KEY , txnid: 10, amount: 10 , productinfo: "legacy_entry" , firstname: "saravanakumar" , email: payload.email , phone: payload.phone_number , surl: "https://legacy-mepco.herokuapp.com/payment_status" , furl: "https://legacy-mepco.herokuapp.com/payment_status" , hash: "82b9f83a5d091018985b53a43b787e8917e403ec477099672724eadedf922fea28ace5775199d160b9d0892a5da6455b6377e5199ccdfdcf737fcde5e4acee73" } )
+} ) 
 
 app.post('/loginuser',(req,res)=>{
     console.log(req.body);
@@ -134,7 +141,7 @@ app.post('/loginuser',(req,res)=>{
                 else{
                     college_name= user.college;
                 }
-                const userDetails= {id: userId, phone_number: user.phone_number, email: user.email, college: college_name, gender: user.gender};
+                const userDetails= {id: userId, name: user.name ,phone_number: user.phone_number, email: user.email, college: college_name, gender: user.gender};
                 // console.log(userDetails)
                 const accessToken = jwt.sign(userDetails, process.env.ACCESS_TOKEN, {expiresIn: '600s'})
                 // res.json({message: 1,token: accessToken});
