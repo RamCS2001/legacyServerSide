@@ -115,12 +115,12 @@ app.post ( "/payment_status" , ( req , res ) => {
         if ( error )
           throw error
         if ( result.paymentHash == req.body.hash ) {
+            User.updateOne ( { email: req.body.mail , accommodationFeesPayment: ( req.body.amount == 300 ) , regFeesPayment: true } )
             res.redirect ( "legacy-mepco.vercel.app/paid?status=" + req.body.status )
         }
         else 
            res.send ( "alert! security breach avoid payment!" )
-    } ) 
-    res.send ( req.body.status )
+    } )
 } )
 app.post ( "/payhash" , authenticateToken , ( req , res ) => {
    let timestamp = new Date ( ).getSeconds ( )
