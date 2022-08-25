@@ -126,7 +126,7 @@ app.post ( "/payhash" , authenticateToken , ( req , res ) => {
    let string = process.env.MERCHANT_KEY + "|"  + payload.email + "|" + req.body.amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
    sha512.update ( string )
    digest = sha512.digest ().toString ( 'hex' )
-   paymentHash.insertOne ( { email: payload.email , paymentHash: digest } , ( error , result ) => {
+   paymentHash.create ( { email: payload.email , paymentHash: digest } , ( error , result ) => {
     if ( error )
       console.log ( error )
    } )
