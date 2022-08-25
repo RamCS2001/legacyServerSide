@@ -1,10 +1,10 @@
 require('dotenv').config()
-const https = require ( "https" )
+const https = require ( "axios" )
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-
+sha512 = require ( "crypto" ).createHash ( "sha512" )
 var cors = require('cors');
 
 const app = express();
@@ -95,7 +95,7 @@ app.post('/createuser',(req,res)=>{
                                     if(err) {
                                         res.json ( { message: 0 } )
                                         console.log ( error )
-                                        return
+                                         return
                                     }
                                     if(newClg) res.json ( { message: 1 } )   //message 1 registration successfull
                                 })
@@ -110,13 +110,17 @@ app.post('/createuser',(req,res)=>{
     } )
 });
 app.post ( "/payment_status" , ( req , res ) => {
-    res.send ( "success" )
     console.log ( "method called" )
 } )
-app.post ( "/pay" , ( req ) => {
-    amount = req.body.amount
-    https.post ( "https://secure.payu.in/_payment" , { key: process.env.MERCHANT_KEY , txnid: 10, amount: 10 , productinfo: "legacy_entry" , firstname: "saravanakumar" , email: payload.email , phone: payload.phone_number , surl: "https://legacy-mepco.herokuapp.com/payment_status" , furl: "https://legacy-mepco.herokuapp.com/payment_status" , hash: "82b9f83a5d091018985b53a43b787e8917e403ec477099672724eadedf922fea28ace5775199d160b9d0892a5da6455b6377e5199ccdfdcf737fcde5e4acee73" } )
-} ) 
+app.post ( "/payhash" , authenticateToken , ( req , res ) => {
+   let string = process.env.MERCHANT_KEY + "|"  + payload.email + "|" + req.body.amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
+   
+   sha512.update ( string )
+   digest = sha512.digest ().toString ( 'hex' )
+   sha512 = require ( "crypto" ).createHash ( "sha512" )
+   console.log ( { payurl: 'https://secure.payu.in/_payment' , data: { "key": process.env.MERCHANT_KEY , "txnid": payload.email, "amount": req.body.amount , "productinfo": "legacyentry" , "firstname": payload.name , "email": payload.email , "phone": payload.phone_number , "surl": "http://127.0.0.1:5000/payment_status" , "furl": "http://127.0.0.1:5000/payment_status" , "hash": digest } } )
+   res.send  ( { payurl: 'https://secure.payu.in/_payment' , data: { "key": process.env.MERCHANT_KEY , "txnid": payload.email, "amount": req.body.amount , "productinfo": "legacyentry" , "firstname": payload.name , "email": payload.email , "phone": payload.phone_number , "surl": "https://legacy-mepco.herokuapp.com/payment_status" , "furl": "https://legacy-mepco.herokuapp.com/payment_status" , "hash": digest } } )
+} )
 
 app.post('/loginuser',(req,res)=>{
     console.log(req.body);
@@ -666,4 +670,4 @@ app.get('/checkCollegeParticipation', authenticateToken, (req,res)=>{
     })
 })
 const port = process.env.PORT || 5000;
-app.listen(port,()=>{ console.log("Server @ ",port)});
+app.listen(port,()=>{ console.log("Server @ ",port)})
