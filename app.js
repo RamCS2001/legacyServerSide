@@ -1,5 +1,4 @@
 require('dotenv').config()
-const https = require ( "axios" )
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -621,44 +620,44 @@ app.post('/participates', authenticateToken, (req, res)=>{
 })
 
 app.get('/Individuallist', authenticateToken, (req, res)=>{
-    if(payload.phone_number!="9944446591"){
-        console.log ( "condition satisfied" )
+    console.log ( req.query.event )
+    if(payload.phone_number!="9486030044"){
         console.log ( payload )
         res.json({message: -1});
     }   
     else{
         let filter
-        if(req.body.event=='0'){
+        if(req.query.event=='0'){
             filter={tamildebate : 1}
         }
-        if(req.body.event=='1'){
+        if(req.query.event=='1'){
             filter={martialarts : 1}
         }
-        if(req.body.event=='2'){
+        if(req.query.event=='2'){
             filter={bestmanager : 1}
         }
-        if(req.body.event=='3'){
+        if(req.query.event=='3'){
             filter={voiceoflegacy : 1}
         }
-        if(req.body.event=='4'){
+        if(req.query.event=='4'){
             filter={musicunplugged: 1}
         }
-        if(req.body.event=='5'){
+        if(req.query.event=='5'){
             filter={kavithaigal : 1}
         }
-        if(req.body.event=='6'){
+        if(req.query.event=='6'){
             filter={pixie : 1}
         }
-        if(req.body.event=='7'){
+        if(req.query.event=='7'){
             filter={yoga: 1}
         }
-        if(req.body.event=='8'){
+        if(req.query.event=='8'){
             filter={debateguru : 1}
         }
-        if(req.body.event=='9'){
+        if(req.query.event=='9'){
             filter={makeyourmove : 1}
         }
-        if(req.body.event=='10'){
+        if(req.query.event=='10'){
             filter={extempore : 1}
         }
         if(req.body.event=='11'){
@@ -679,9 +678,10 @@ app.get('/Individuallist', authenticateToken, (req, res)=>{
 })
 
 app.get('/Grouplist', authenticateToken, (req, res)=>{
-    if(payload.admission_number!="aaaaa"){
+    if(payload.phone_number!="9486030044"){
+        console.log ( payload )
         res.json({message: -1});
-    }
+    }   
     else{
         const filter = {event: req.query.event}
         groupEvents.find(filter, async function(err,docs){
@@ -696,9 +696,9 @@ app.get('/Grouplist', authenticateToken, (req, res)=>{
                     team["teamName"]=docs[i]["teamname"];
                     let rollNo = [];
                     for(let j=0; j<docs[i].participants.length; j++){
-                        rollNo.push(docs[i].participants[j]["admission_number"]);
+                        phoneNo.push(docs[i].participants[j]["phone_number"]);
                     }
-                    let members = await User.find({ admission_number: { $in: rollNo } });
+                    let members = await User.find({ phone_number: { $in: phoneNo } });
                     team["members"] = members;
                     team["totalMembers"]=docs[i].participants
                     responseData.push(team)
@@ -712,7 +712,7 @@ app.get('/Grouplist', authenticateToken, (req, res)=>{
 
 
 app.get('/all',authenticateToken, (req,res)=>{
-    if(payload.admission_number!="aaaaa"){
+    if(payload.phone_number!="9486030044"){
         res.json({message: -1});
     }
     User.find((err,docs)=>{
@@ -733,6 +733,14 @@ app.get('/checkCollegeParticipation', authenticateToken, (req,res)=>{
         else{
             res.json({message: -1})
         }
+    })
+})
+
+
+app.get('/getcollegelist', (req,res)=>{
+    count.find({},(err,docs)=>{
+        if(err) return err
+        res.json(docs)
     })
 })
 const port = process.env.PORT || 5000;
