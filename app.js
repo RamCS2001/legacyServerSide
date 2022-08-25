@@ -109,9 +109,9 @@ app.post('/createuser',(req,res)=>{
         }
     } )
 });
-app.post ( "/payment_status" , ( req , res ) => {
+app.get ( "/payment_status" , ( req , res ) => {
     console.log ( "method called" )
-    res.send ( "yes payment sucess" )
+    res.send ( req.status )
 } )
 app.post ( "/payhash" , authenticateToken , ( req , res ) => {
    let string = process.env.MERCHANT_KEY + "|"  + payload.email + "|" + req.body.amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
