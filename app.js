@@ -22,6 +22,7 @@ const User = require('./models/User');
 const groupEvents = require('./models/groupEvents');
 const count= require('./models/count');
 const collegeEvents = require('./models/collegeEvents');
+const paymentHash = require ( './models/PaymentHash' )
 
 app.get('/', (req,res)=>{
     res.send("Hello")
@@ -109,16 +110,29 @@ app.post('/createuser',(req,res)=>{
     } )
 });
 app.post ( "/payment_status" , ( req , res ) => {
-    console.log ( "method called" )
+    paymentHash.findOne ( { email: req.body.email } , ( error , result ) => {
+        if ( error )
+          throw error
+        if ( result.paymentHash == req.body.hash ) {
+            res.redirect ( "legacy-mepco.vercel.app/paid?status=" + req.body.status )
+        }
+        else 
+           res.send ( "alert! security breach avoid payment!" )
+    } ) 
+    res.send ( req.body.status )
 } )
 app.post ( "/payhash" , authenticateToken , ( req , res ) => {
-   let string = process.env.MERCHANT_KEY + "|"  + payload.email + "|" + req.body.amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
-   
+   let timestamp = new Date ( ).getSeconds ( )
+   let string = process.env.MERCHANT_KEY + "|"  + (payload.email + timestamp) + "|" + req.body.amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
    sha512.update ( string )
    digest = sha512.digest ().toString ( 'hex' )
+   paymentHash.create ( { email: payload.email , paymentHash: digest } , ( error , result ) => {
+    if ( error )
+      console.log ( error )
+   } )
    sha512 = require ( "crypto" ).createHash ( "sha512" )
-   console.log ( { payurl: 'https://secure.payu.in/_payment' , data: { "key": process.env.MERCHANT_KEY , "txnid": payload.email, "amount": req.body.amount , "productinfo": "legacyentry" , "firstname": payload.name , "email": payload.email , "phone": payload.phone_number , "surl": "http://127.0.0.1:5000/payment_status" , "furl": "http://127.0.0.1:5000/payment_status" , "hash": digest } } )
-   res.send  ( { payurl: 'https://secure.payu.in/_payment' , data: { "key": process.env.MERCHANT_KEY , "txnid": payload.email, "amount": req.body.amount , "productinfo": "legacyentry" , "firstname": payload.name , "email": payload.email , "phone": payload.phone_number , "surl": "https://legacy-mepco.herokuapp.com/payment_status" , "furl": "https://legacy-mepco.herokuapp.com/payment_status" , "hash": digest } } )
+
+   res.send  ( { payurl: 'https://secure.payu.in/_payment' , data: { key: process.env.MERCHANT_KEY , txnid: (payload.email + timestamp), amount: req.body.amount , productinfo: "legacyentry" , firstname: payload.name , email: payload.email , phone: payload.phone_number , surl: "https://legacy-mepco.herokuapp.com/payment_status" , furl: "https://legacy-mepco.herokuapp.com/payment_status" , hash: digest } } )
 } )
 
 app.post('/loginuser',(req,res)=>{
