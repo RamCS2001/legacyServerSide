@@ -4,7 +4,11 @@ const collegeEventsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    asyoulikeit: {
+    tamildebate: {
+        type: Number,
+        default: 0,
+    },
+    martialarts: {
         type: Number,
         default: 0,
     },
@@ -12,15 +16,15 @@ const collegeEventsSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    solosinging: {
+    voiceoflegacy: {
         type: Number,
         default: 0,
     },
-    solodance: {
+    musicunplugged: {
         type: Number,
         default: 0,
     },
-    soloinstrumental: {
+    kavithaigal: {
         type: Number,
         default: 0,
     },
@@ -28,15 +32,27 @@ const collegeEventsSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    pencilsketching: {
-        type: Number,
-        default: 0,
-    },
     yoga: {
         type: Number,
         default: 0,
     },
-    ezhuthaani: {
+    debateguru: {
+        type: Number,
+        default: 0,
+    },
+    makeyourmove: {
+        type: Number,
+        default: 0,
+    },
+    extempore: {
+        type: Number,
+        default: 0,
+    },
+    pencilsketching: {
+        type: Number,
+        default: 0,
+    },
+    symphonique: {
         type: Number,
         default: 0,
     },
@@ -44,43 +60,19 @@ const collegeEventsSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    tressurehunt: {
+    monstersmuss: {
         type: Number,
         default: 0,
     },
-    themissingpiece: {
+    kalakkalkalatta: {
         type: Number,
         default: 0,
     },
-    radiomirchi: {
+    sherlockholmes: {
         type: Number,
         default: 0,
     },
-    englishpotpourri: {
-        type: Number,
-        default: 0,
-    },
-    lyricalhunt: {
-        type: Number,
-        default: 0,
-    },
-    tamilpotpourri: {
-        type: Number,
-        default: 0,
-    },
-    cinmatrix: {
-        type: Number,
-        default: 0,
-    },
-    quiz: {
-        type: Number,
-        default: 0,
-    },
-    groupdance: {
-        type: Number,
-        default: 0,
-    },
-    postermaking: {
+    quizzards: {
         type: Number,
         default: 0,
     },
@@ -88,10 +80,54 @@ const collegeEventsSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    dramatix: {
+    graphix: {
         type: Number,
         default: 0,
     },
+    choreoboom: {
+        type: Number,
+        default: 0,
+    },
+    ideapresentation: {
+        type: Number,
+        default: 0,
+    },
+    marketomania: {
+        type: Number,
+        default: 0,
+    },
+    dramatics: {
+        type: Number,
+        default: 0,
+    },
+    cinematrix: {
+        type: Number,
+        default: 0,
+    },
+    liphomaniac: {
+        type: Number,
+        default: 0,
+    },
+    expressions: {
+        type: Number,
+        default: 0,
+    },
+    treasurehunt: {
+        type: Number,
+        default: 0,
+    },
+    warwithwords: {
+        type: Number,
+        default: 0,
+    },
+    translation: {
+        type: Number,
+        default: 0,
+    },
+    lyricalhunt: {
+        type: Number,
+        default: 0,
+    }
 });
 
 const collegeEvents= mongoose.model('collegeEvents',collegeEventsSchema);

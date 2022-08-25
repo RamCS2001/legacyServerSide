@@ -177,64 +177,68 @@ app.get('/getuserdetails',authenticateToken  ,(req,res)=>{
         else{
             // console.log(user);
             let events= "";
-            if(user.asyoulikeit==1){
-                events = events + "As You Like It&";
+            if(user.tamildebate==1){
+                events = events + "நீயா நானா?&";
+            }if(user.martialarts==1){
+                events = events + "Martial Arts&";
             }if(user.bestmanager==1){
                 events = events + "Best Manager&";
-            }if(user.solosinging==1){
-                events = events + "Solo Singing&";
-            }if(user.solodance==1){
-                events = events + "Solo Dance&";
-            }if(user.soloinstrumental==1){
-                events = events + "Solo Instrumental&";
+            }if(user.voiceoflegacy==1){
+                events = events + "Voice of Legacy&";
+            }if(user.musicunplugged==1){
+                events = events + "Music Unplugged&";
+            }if(user.kavithaigal==1){
+                events = events + "கவித்திடல்&";
             }if(user.pixie==1){
                 events = events + "Pixie&";
-            }if(user.pencilsketching==1){
-                events = events + "Pencil Sketching&";
             }if(user.yoga==1){
                 events = events + "Yoga&";
-            }
-            if(user.ezhuthaani==1){
-                events = events + "Ezhuthaani&";
-            }
-            if(user.divideandconquer==1){
+            }if(user.debateguru==1){
+                events = events + "Debate Guru&";
+            }if(user.makeyourmove==1){
+                events = events + "Make Your Move&";
+            }if(user.extempore==1){
+                events = events + "Extempore&";
+            }if(user.pencilsketching==1){
+                events = events + "Pencil Sketching&";
+            }if(user.symphonique==1){
+                events = events + "Symphonique&";
+            }if(user.divideandconquer==1){
                 events = events + "Divide and Conquer&";
-            }
-            if(user.tressurehunt==1){
-                events = events + "Treasure hunt&";
-            }
-            if(user.themissingpiece==1){   
-                events = events + "The Missing Piece&";
-            }
-            if(user.radiomirchi==1){   
-                events = events + "Radio Mirchi&";
-            }
-            if(user.englishpotpourri==1){   
-                events = events + "English Potpourri&";
-            }
-            if(user.lyricalhunt==1){   
-                events = events + "Lyrical Hunt&";
-            }
-            if(user.tamilpotpourri==1){   
-                events = events + "Tamil Potpourri&";
-            }
-            if(user.cinmatrix==1){   
-                events = events + "Cinematrix (Short Flim)&";
-            }
-            if(user.groupdance==1){   
-                events = events + "Group Dance&";
-            }
-            if(user.postermaking==1){   
-                events = events + "Poster Making&";
-            }
-            if(user.dramatix==1){   
-                events = events + "Dramatix&";
-            }
-            if(user.quiz==1){   
-                events = events + "Quizzards of Oz&";
-            }
-            if(user.rangoli==1){   
+            }if(user.monstersmuss==1){   
+                events = events + "Monsters' Muss&";
+            }if(user.kalakkalkalatta==1){   
+                events = events + "Kalakkal Kalatta&";
+            }if(user.sherlockholmes==1){   
+                events = events + "Sherlock Holmes&";
+            }if(user.quizzards==1){   
+                events = events + "Quizzards&";
+            }if(user.rangoli==1){   
                 events = events + "Rangoli&";
+            }if(user.graphix==1){   
+                events = events + "Graphix&";
+            }if(user.choreoboom==1){   
+                events = events + "Choreo Boom&";
+            }if(user.ideapresentation==1){   
+                events = events + "Idea Presentation&";
+            }if(user.marketomania==1){   
+                events = events + "Marketomania&";
+            }if(user.dramatics==1){   
+                events = events + "Dramatics&";
+            }if(user.cinematrix==1){   
+                events = events + "Cinematrix (Short Flim)&";
+            }if(user.liphomaniac==1){   
+                events = events + "Liphomaniac&";
+            }if(user.expressions==1){   
+                events = events + "Expressions&";
+            }if(user.treasurehunt==1){
+                events = events + "Treasure hunt&";
+            }if(user.warwithwords==1){   
+                events = events + "War with Words&";
+            }if(user.translation==1){   
+                events = events + "Translation&";
+            }if(user.lyricalhunt==1){   
+                events = events + "Lyrical Hunt&";
             }
             let replaced= events.replace(/&/g, ",");
             let yourEvents= replaced.replace(/.$/,".")
@@ -292,31 +296,40 @@ app.post('/participate', authenticateToken, async function (req,res){
     const filter={ _id: payload.id }
     let update
     if(req.body.event=='0'){
-        update={$set: {asyoulikeit: 1}}
+        update={$set: {tamildebate : 1}}
     }
     if(req.body.event=='1'){
-        update={$set: {bestmanager: 1}}
+        update={$set: {martialarts : 1}}
     }
     if(req.body.event=='2'){
-        update={$set: {solodance: 1}}
+        update={$set: {bestmanager : 1}}
     }
     if(req.body.event=='3'){
-        update={$set: {solosinging: 1}}
+        update={$set: {voiceoflegacy : 1}}
     }
     if(req.body.event=='4'){
-        update={$set: {soloinstrumental: 1}}
+        update={$set: {musicunplugged: 1}}
     }
     if(req.body.event=='5'){
-        update={$set: {pixie: 1}}
+        update={$set: {kavithaigal : 1}}
     }
     if(req.body.event=='6'){
-        update={$set: {pencilsketching: 1}}
+        update={$set: {pixie : 1}}
     }
     if(req.body.event=='7'){
         update={$set: {yoga: 1}}
     }
     if(req.body.event=='8'){
-        update={$set: {ezhuthaani: 1}}
+        update={$set: {debateguru : 1}}
+    }
+    if(req.body.event=='9'){
+        update={$set: {makeyourmove : 1}}
+    }
+    if(req.body.event=='10'){
+        update={$set: {extempore : 1}}
+    }
+    if(req.body.event=='11'){
+        update={$set: {pencilsketching  : 1}}
     }
 
     User.findOneAndUpdate(filter, update, function (err, docs){
@@ -331,32 +344,41 @@ app.post('/participate', authenticateToken, async function (req,res){
                 if(err) return err;
                 if(clg) {
                     currentCount = clg[req.body.serverName];
-                    if(req.body.serverName=="asyoulikeit"){
-                        eventToUpdate={asyoulikeit: currentCount+1}
+                    if(req.body.serverName=="tamildebate"){
+                        eventToUpdate={tamildebate: currentCount+1}
+                    }
+                    if(req.body.serverName=="martialarts"){
+                        eventToUpdate={martialarts : currentCount+1}
                     }
                     if(req.body.serverName=="bestmanager"){
-                        eventToUpdate={bestmanager: currentCount+1}
+                        eventToUpdate={bestmanager : currentCount+1}
                     }
-                    if(req.body.serverName=="solosinging"){
-                        eventToUpdate={solosinging: currentCount+1}
+                    if(req.body.serverName=="voiceoflegacy"){
+                        eventToUpdate={voiceoflegacy: currentCount+1}
                     }
-                    if(req.body.serverName=="solodance"){
-                        eventToUpdate={solodance: currentCount+1}
+                    if(req.body.serverName=="musicunplugged"){
+                        eventToUpdate={musicunplugged: currentCount+1}
                     }
-                    if(req.body.serverName=="soloinstrumental"){
-                        eventToUpdate={soloinstrumental: currentCount+1}
+                    if(req.body.serverName=="kavithaigal"){
+                        eventToUpdate={kavithaigal : currentCount+1}
                     }
                     if(req.body.serverName=="pixie"){
-                        eventToUpdate={pixie: currentCount+1}
-                    }
-                    if(req.body.serverName=="pencilsketching"){
-                        eventToUpdate={pencilsketching: currentCount+1}
+                        eventToUpdate={pixie : currentCount+1}
                     }
                     if(req.body.serverName=="yoga"){
                         eventToUpdate={yoga: currentCount+1}
                     }
-                    if(req.body.serverName=="ezhuthaani"){
-                        eventToUpdate={ezhuthaani: currentCount+1}
+                    if(req.body.serverName=="debateguru"){
+                        eventToUpdate={debateguru : currentCount+1}
+                    }
+                    if(req.body.serverName=="makeyourmove"){
+                        eventToUpdate={makeyourmove : currentCount+1}
+                    }
+                    if(req.body.serverName=="extempore"){
+                        eventToUpdate={extempore  : currentCount+1}
+                    }
+                    if(req.body.serverName=="pencilsketching "){
+                        eventToUpdate={pencilsketching   : currentCount+1}
                     }
                     collegeEvents.findByIdAndUpdate(clg._id, eventToUpdate, (err, newClg)=>{
                         if(err) return err;
@@ -439,44 +461,62 @@ app.post('/participates', authenticateToken, (req, res)=>{
 
         else{
             let update
-            if(req.body.event==9){
-                update= {$set: {divideandconquer: 1}}
-            }
-            if(req.body.event==10){
-                update= {$set: {tressurehunt: 1}}
-            }
-            if(req.body.event==11){
-                update= {$set: {themissingpiece: 1}}
-            }
             if(req.body.event==12){
-                update= {$set: {radiomirchi: 1}}
+                update= {$set: {symphonique : 1}}
             }
             if(req.body.event==13){
-                update= {$set: {englishpotpourri: 1}}
+                update= {$set: {divideandconquer : 1}}
             }
             if(req.body.event==14){
-                update= {$set: {lyricalhunt: 1}}
+                update= {$set: {monstersmuss: 1}}
             }
             if(req.body.event==15){
-                update= {$set: {tamilpotpourri: 1}}
+                update= {$set: {kalakkalkalatta: 1}}
             }
             if(req.body.event==16){
-                update= {$set: {cinmatrix: 1}}
+                update= {$set: {sherlockholmes: 1}}
             }
             if(req.body.event==17){
-                update= {$set: {quiz: 1}}
+                update= {$set: {quizzards: 1}}
             }
             if(req.body.event==18){
-                update= {$set: {groupdance: 1}}
-            }
-            if(req.body.event==19){
-                update= {$set: {postermaking: 1}}
-            }
-            if(req.body.event==20){
                 update= {$set: {rangoli: 1}}
             }
+            if(req.body.event==19){
+                update= {$set: {graphix: 1}}
+            }
+            if(req.body.event==20){
+                update= {$set: {choreoboom: 1}}
+            }
             if(req.body.event==21){
-                update= {$set: {dramatix: 1}}
+                update= {$set: {ideapresentation: 1}}
+            }
+            if(req.body.event==22){
+                update= {$set: {marketomania: 1}}
+            }
+            if(req.body.event==23){
+                update= {$set: {dramatics: 1}}
+            }
+            if(req.body.event==24){
+                update= {$set: {cinematrix: 1}}
+            }
+            if(req.body.event==25){
+                update= {$set: {liphomaniac: 1}}
+            }
+            if(req.body.event==26){
+                update= {$set: {expressions: 1}}
+            }
+            if(req.body.event==27){
+                update= {$set: {treasurehunt: 1}}
+            }
+            if(req.body.event==28){
+                update= {$set: {warwithwords: 1}}
+            }
+            if(req.body.event==29){
+                update= {$set: {translation: 1}}
+            }
+            if(req.body.event==30){
+                update= {$set: {lyricalhunt: 1}}
             }
             
             for(let i=0; i<req.body.participants.length; i++){
@@ -506,45 +546,62 @@ app.post('/participates', authenticateToken, (req, res)=>{
                             let eventToUpdate
                             currentCount = clg[req.body.serverName];
                             console.log(currentCount)
-
+                            if(req.body.serverName=="symphonique"){
+                                eventToUpdate={symphonique: currentCount+1}
+                            }
                             if(req.body.serverName=="divideandconquer"){
                                 eventToUpdate={divideandconquer: currentCount+1}
                             }
-                            if(req.body.serverName=="treasurehunt"){
-                                eventToUpdate={treasurehunt: currentCount+1}
+                            if(req.body.serverName=="monstersmuss"){
+                                eventToUpdate={monstersmuss: currentCount+1}
                             }
-                            if(req.body.serverName=="themissingpiece"){
-                                eventToUpdate={themissingpiece: currentCount+1}
+                            if(req.body.serverName=="kalakkalkalatta"){
+                                eventToUpdate={kalakkalkalatta: currentCount+1}
                             }
-                            if(req.body.serverName=="radiomirchi"){
-                                eventToUpdate={radiomirchi: currentCount+1}
+                            if(req.body.serverName=="sherlockholmes"){
+                                eventToUpdate={sherlockholmes: currentCount+1}
                             }
-                            if(req.body.serverName=="englishpotpourri"){
-                                eventToUpdate={englishpotpourri: currentCount+1}
-                            }
-                            if(req.body.serverName=="lyricalhunt"){
-                                eventToUpdate={lyricalhunt: currentCount+1}
-                            }
-                            if(req.body.serverName=="tamilpotpourri"){
-                                eventToUpdate={tamilpotpourri: currentCount+1}
-                            }
-                            if(req.body.serverName=="cinmatrix"){
-                                eventToUpdate={cinmatrix: currentCount+1}
-                            }
-                            if(req.body.serverName=="groupdance"){
-                                eventToUpdate={groupdance: currentCount+1}
-                            }
-                            if(req.body.serverName=="quiz"){
-                                eventToUpdate={quiz: currentCount+1}
-                            }
-                            if(req.body.serverName=="postermaking"){
-                                eventToUpdate={postermaking: currentCount+1}
+                            if(req.body.serverName=="quizzards"){
+                                eventToUpdate={quizzards: currentCount+1}
                             }
                             if(req.body.serverName=="rangoli"){
                                 eventToUpdate={rangoli: currentCount+1}
                             }
-                            if(req.body.serverName=="dramatix"){
-                                eventToUpdate={dramatix: currentCount+1}
+                            if(req.body.serverName=="graphix"){
+                                eventToUpdate={graphix: currentCount+1}
+                            }
+                            if(req.body.serverName=="choreoboom"){
+                                eventToUpdate={choreoboom: currentCount+1}
+                            }
+                            if(req.body.serverName=="ideapresentation"){
+                                eventToUpdate={ideapresentation: currentCount+1}
+                            }
+                            if(req.body.serverName=="marketomania"){
+                                eventToUpdate={marketomania: currentCount+1}
+                            }
+                            if(req.body.serverName=="dramatics"){
+                                eventToUpdate={dramatics: currentCount+1}
+                            }
+                            if(req.body.serverName=="cinematrix"){
+                                eventToUpdate={cinematrix: currentCount+1}
+                            }
+                            if(req.body.serverName=="liphomaniac"){
+                                eventToUpdate={liphomaniac: currentCount+1}
+                            }
+                            if(req.body.serverName=="expressions"){
+                                eventToUpdate={expressions: currentCount+1}
+                            }
+                            if(req.body.serverName=="treasurehunt"){
+                                eventToUpdate={treasurehunt: currentCount+1}
+                            }
+                            if(req.body.serverName=="warwithwords"){
+                                eventToUpdate={warwithwords: currentCount+1}
+                            }
+                            if(req.body.serverName=="translation"){
+                                eventToUpdate={translation: currentCount+1}
+                            }
+                            if(req.body.serverName=="lyricalhunt"){
+                                eventToUpdate={lyricalhunt: currentCount+1}
                             }
                             console.log(eventToUpdate)
                             collegeEvents.findByIdAndUpdate(clg._id, eventToUpdate, (err, newClg)=>{
@@ -571,32 +628,41 @@ app.get('/Individuallist', authenticateToken, (req, res)=>{
     }   
     else{
         let filter
-        if(req.query.event=='0'){
-            filter= {asyoulikeit: 1}
+        if(req.body.event=='0'){
+            filter={tamildebate : 1}
         }
-        if(req.query.event=='1'){
-            filter= {bestmanager: 1}
+        if(req.body.event=='1'){
+            filter={martialarts : 1}
         }
-        if(req.query.event=='2'){
-            filter= {solodance: 1}
+        if(req.body.event=='2'){
+            filter={bestmanager : 1}
         }
-        if(req.query.event=='3'){
-            filter={solosinging: 1}
+        if(req.body.event=='3'){
+            filter={voiceoflegacy : 1}
         }
-        if(req.query.event=='4'){
-            filter= {soloinstrumental: 1}
+        if(req.body.event=='4'){
+            filter={musicunplugged: 1}
         }
-        if(req.query.event=='5'){
-            filter= {pixie: 1}
+        if(req.body.event=='5'){
+            filter={kavithaigal : 1}
         }
-        if(req.query.event=='6'){
-            filter={pencilsketching: 1}
+        if(req.body.event=='6'){
+            filter={pixie : 1}
         }
-        if(req.query.event=='7'){
+        if(req.body.event=='7'){
             filter={yoga: 1}
         }
-        if(req.query.event=='8'){
-            filter={ezhuthaani: 1}
+        if(req.body.event=='8'){
+            filter={debateguru : 1}
+        }
+        if(req.body.event=='9'){
+            filter={makeyourmove : 1}
+        }
+        if(req.body.event=='10'){
+            filter={extempore : 1}
+        }
+        if(req.body.event=='11'){
+            filter= {pencilsketching  : 1}
         }
         User.find(filter,function (err, docs){
             if(err){
