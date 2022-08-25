@@ -110,8 +110,8 @@ app.post('/createuser',(req,res)=>{
         }
     } )
 });
-app.post ( "/payment_status" , authenticateToken ,  ( req , res ) => {
-    paymentHash.findOne ( { email: payload.email } , ( error , result ) => {
+app.post ( "/payment_status" , ( req , res ) => {
+    paymentHash.findOne ( { email: req.body.email } , ( error , result ) => {
         if ( error )
           throw error
         if ( result.paymentHash == req.body.hash ) {
