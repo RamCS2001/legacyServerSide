@@ -25,7 +25,7 @@ const count= require('./models/count');
 const collegeEvents = require('./models/collegeEvents');
 
 app.get('/', (req,res)=>{
-    res.send("Hello World")
+    res.send("Hello")
 });
 
 app.post('/createuser',(req,res)=>{
