@@ -123,7 +123,7 @@ app.post ( "/payment_status" , ( req , res ) => {
     res.send ( req.body.status )
 } )
 app.post ( "/payhash" , authenticateToken , ( req , res ) => {
-   let string = process.env.MERCHANT_KEY + "|"  + payload.email + "|" + req.body.amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
+   let string = process.env.TEST_KEY + "|"  + payload.email + "|" + req.body.amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.TEST_SALT
    sha512.update ( string )
    digest = sha512.digest ().toString ( 'hex' )
    paymentHash.create ( { email: payload.email , paymentHash: digest } , ( error , result ) => {
@@ -131,8 +131,8 @@ app.post ( "/payhash" , authenticateToken , ( req , res ) => {
       console.log ( error )
    } )
    sha512 = require ( "crypto" ).createHash ( "sha512" )
-   console.log ( { payurl: 'https://secure.payu.in/_payment' , data: { "key": process.env.MERCHANT_KEY , "txnid": payload.email, "amount": req.body.amount , "productinfo": "legacyentry" , "firstname": payload.name , "email": payload.email , "phone": payload.phone_number , "surl": "http://127.0.0.1:5000/payment_status" , "furl": "http://127.0.0.1:5000/payment_status" , "hash": digest } } )
-   res.send  ( { payurl: 'https://secure.payu.in/_payment' , data: { "key": process.env.MERCHANT_KEY , "txnid": payload.email, "amount": req.body.amount , "productinfo": "legacyentry" , "firstname": payload.name , "email": payload.email , "phone": payload.phone_number , "surl": "https://legacy-mepco.herokuapp.com/payment_status" , "furl": "https://legacy-mepco.herokuapp.com/payment_status" , "hash": digest } } )
+
+   res.send  ( { payurl: 'https://secure.payu.in/_payment' , data: { "key": process.env.MERCHANT_KEY , "txnid": payload.email, "amount": req.body.amount , productinfo: "legacyentry" , firstname: payload.name , email: payload.email , phone: payload.phone_number , surl: "https://legacy-mepco.herokuapp.com/payment_status" , furl: "https://legacy-mepco.herokuapp.com/payment_status" , hash: digest } } )
 } )
 
 app.post('/loginuser',(req,res)=>{
