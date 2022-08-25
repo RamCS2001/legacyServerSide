@@ -115,7 +115,7 @@ app.post ( "/payment_status" , ( req , res ) => {
         if ( error )
           throw error
         if ( result.paymentHash == req.body.hash ) {
-            res.send ( { status: req.body.status } )
+            res.redirect ( "legacy-mepco.vercel.app/paid?status=" + req.body.status )
         }
         else 
            res.send ( "alert! security breach avoid payment!" )
