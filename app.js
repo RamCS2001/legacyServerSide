@@ -270,7 +270,9 @@ app.get('/getuserdetails',authenticateToken  ,(req,res)=>{
                 year: user.year,
                 phone_number: user.phone_number,
                 email: user.email,
-                yourEvents: yourEvents
+                yourEvents: yourEvents,
+                paid: user.regFeesPayment,
+                accPaid: user.accommodationFeesPayment
             }
             res.json({message: 1,userDetails: userDetail})
         }
@@ -758,4 +760,4 @@ app.get('/getcollegelist', (req,res)=>{
     })
 })
 const port = process.env.PORT || 5000;
-app.listen(port,()=>{ console.log("Server @ ",port)})
+app.listen(port,()=>{ console.log("Server @ ",port)})   
