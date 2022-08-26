@@ -120,7 +120,7 @@ app.post('/createuser',(req,res)=>{
     } )
 });
 app.post ( "/payment_status" , ( req , res ) => {
-    console.log ( req.body.hash )
+    console.log ( req.body.hash , req.body.email )
     paymentHash.findOne ( { email: req.body.email } , ( error , result ) => {
       if ( error )
         console.log ( "error in payment status: finding email hash" )
