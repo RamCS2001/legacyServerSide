@@ -31,13 +31,10 @@ function getHash ( status , amount , payload , reverse ) {
   let sha512 = require ( "crypto" ).createHash ( "sha512" )
   let timestamp = new Date ( ).getTime ( )
   let formulatedString = process.env.MERCHANT_KEY + "|"  + (payload.email + timestamp) + "|" + amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
-    sha512.update ( string )
-   if ( reverse ) {
+  if ( reverse ) {
      formulatedString = process.env.SALT + "|" + status + "|||||||||||" + payload.email + "|" + payload.mail + "|legacyentry|" + amount + "|" + ( payload.mail + timestamp ) + "|" + process.env.MERCHANT_KEY
    }
-   else {
-    sha512.update ( formulatedString )
-   }
+   sha512.update ( formulatedString )
    return reverse ? sha.digest ( ).toString ( "hex" ) : { time: timestamp , digest: sha.digest ( ).toString ( "hex" ) }
 }
 
