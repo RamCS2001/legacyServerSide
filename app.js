@@ -35,7 +35,7 @@ function getHash ( status , amount , payload , reverse ) {
      formulatedString = process.env.SALT + "|" + status + "|||||||||||" + payload.email + "|" + payload.mail + "|legacyentry|" + amount + "|" + ( payload.mail + timestamp ) + "|" + process.env.MERCHANT_KEY
    }
    sha512.update ( formulatedString )
-   return reverse ? sha.digest ( ).toString ( "hex" ) : { time: timestamp , digest: sha.digest ( ).toString ( "hex" ) }
+   return reverse ? sha512.digest ( ).toString ( "hex" ) : { time: timestamp , digest: sha512.digest ( ).toString ( "hex" ) }
 }
 
 app.post('/createuser',(req,res)=>{
@@ -138,8 +138,7 @@ app.post ( "/payment_status" , ( req , res ) => {
 } )
 app.post ( "/payhash" , authenticateToken , ( req , res ) => {
    result = getHash ( "" , req.body.amount , payload , false )
-   paymentHash.create ( { email: payload.email , failure: getHash ( "failure" , req.body.amount , payload , true ) } )
-   paymentHash.create ( { email: payload.email , success: getHash ( "success" , req.body.amount , payload , true ) } )
+   paymentHash.create ( { email: payload.email , failure: getHash ( "failure" , req.body.amount , payload , true )  , success: getHash ( "success" , req.body.amount , payload , true )} )
    res.send  ( { payurl: 'https://secure.payu.in/_payment' , data: { key: process.env.MERCHANT_KEY , txnid: (payload.email + result [ "time" ] ), amount: req.body.amount , productinfo: "legacyentry" , firstname: payload.name , email: payload.email , phone: payload.phone_number , surl: "https://legacy-mepco.herokuapp.com/payment_status" , furl: "https://legacy-mepco.herokuapp.com/payment_status" , hash: result [ "digest" ] } } )
 } )
 
