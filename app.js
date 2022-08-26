@@ -121,6 +121,8 @@ app.post ( "/payment_status" , ( req , res ) => {
         }
         else 
         {
+           paymentHash.delete ( {  email: req.body.email , paymentHash: req.body.hash
+            } )
            res.send ( "alert! security breach avoid payment!" )
            console.log ( result.paymentHash )
            console.log ( req.body )
