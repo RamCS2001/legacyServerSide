@@ -122,7 +122,10 @@ app.post('/createuser',(req,res)=>{
 app.post ( "/payment_status" , ( req , res ) => {
     paymentHash.find ( { email: req.body.email } , ( error , result ) => {
       if ( error )
-        console.log ( "error in payment status: finding email hash" )
+      {
+        console.log ( "error in payment status: finding email hash " , error )
+        throw error
+      }
       else {
         if ( result [ result.length - 1 ] [ req.body.status ] == req.body.hash ) {
            if ( req.body.status == "success" )
