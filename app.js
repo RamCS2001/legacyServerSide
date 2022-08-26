@@ -126,8 +126,12 @@ app.post ( "/payment_status" , ( req , res ) => {
       else {
         if ( result [ result.length - 1 ] [ req.body.status ] == req.body.hash ) {
            if ( req.body.status == "success" )
-             User.findOneAndUpdate ( { email: req.body.email } , { regFeesPayment: true, accommodationFeesPayment: ( parseInt ( req.body.amount ) > 300 ) })
-           res.redirect ( "https://legacy-mepco.vercel.app/paid?status=" + req.body.status )
+             User.findOneAndUpdate ( { email: req.body.email } , { regFeesPayment: true, accommodationFeesPayment: ( parseInt ( req.body.amount ) > 300 ) } , ( error , result ) => {
+                if ( error )
+                  throw error
+                if(result) 
+                    res.redirect ( "https://legacy-mepco.vercel.app/paid?status=" + req.body.status )
+             } )
         }
         else
         {
