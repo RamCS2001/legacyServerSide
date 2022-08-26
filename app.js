@@ -32,7 +32,7 @@ function getHash ( status , amount , payload , reverse ) {
   let timestamp = new Date ( ).getTime ( )
   let formulatedString = process.env.MERCHANT_KEY + "|"  + (payload.email + timestamp) + "|" + amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
   if ( reverse ) {
-     formulatedString = process.env.SALT + "|" + status + "|||||||||||" + payload.email + "|" + payload.mail + "|legacyentry|" + amount + "|" + ( payload.email + timestamp ) + "|" + process.env.MERCHANT_KEY
+     formulatedString = process.env.SALT + "|" + status + "|||||||||||" + payload.email + "|" + payload.name + "|legacyentry|" + amount + "|" + ( payload.email + timestamp ) + "|" + process.env.MERCHANT_KEY
    }
    console.log ( formulatedString )
    sha512.update ( formulatedString )
