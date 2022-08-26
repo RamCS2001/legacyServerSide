@@ -114,13 +114,17 @@ app.post ( "/payment_status" , ( req , res ) => {
         if ( error )
           throw error
         if ( result.paymentHash == req.body.hash ) {
-            User.updateOne ( { email: req.body.mail , accommodationFeesPayment: ( req.body.amount == 300 ) , regFeesPayment: true } )
-            paymentHash.delete ( {  email: req.body.mail , paymentHash: req.body.hash
+            User.updateOne ( { email: req.body.email , accommodationFeesPayment: ( req.body.amount == 300 ) , regFeesPayment: true } )
+            paymentHash.delete ( {  email: req.body.email , paymentHash: req.body.hash
             } )
             res.redirect ( "legacy-mepco.vercel.app/paid?status=" + req.body.status )
         }
         else 
+        {
            res.send ( "alert! security breach avoid payment!" )
+           console.log ( result.paymentHash )
+           console.log ( req.body )
+        }
     } )
 } )
 app.post ( "/payhash" , authenticateToken , ( req , res ) => {
