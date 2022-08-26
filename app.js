@@ -121,17 +121,16 @@ app.post('/createuser',(req,res)=>{
 });
 app.post ( "/payment_status" , ( req , res ) => {
     console.log ( req.body )
-    paymentHash.findOne ( { email: req.body.email } , ( error , result ) => {
+    paymentHash.find ( { email: req.body.email } , ( error , result ) => {
       if ( error )
         console.log ( "error in payment status: finding email hash" )
       else {
-        if ( result [ req.body.status ] == req.body.hash ) {
-           paymentHash.findByIdAndRemove ( result._id )
-           res.redirect ( "legacy-mepco.vercel.app/paid?status=" + req.body.status )
+        if ( result [ result.length - 1 ] [ req.body.status ] == req.body.hash ) {
+           res.redirect ( "legacymepco.vercel.app/paid?status=" + req.body.status )
         }
         else
         {
-           console.log ( result [ req.body.status ] )
+           console.log ( result [ result.length - 1 ] [ req.body.status ] )
            res.send ( "security breach!" )
         }
       }
