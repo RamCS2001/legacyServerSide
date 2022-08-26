@@ -32,7 +32,7 @@ function getHash ( status , amount , payload , reverse ) {
   let timestamp = new Date ( ).getTime ( )
   let formulatedString = process.env.MERCHANT_KEY + "|"  + (payload.email + timestamp) + "|" + amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
   if ( reverse ) {
-     formulatedString = process.env.SALT + "|" + status + "|||||||||||" + payload.email + "|" + payload.mail + "|legacyentry|" + amount + "|" + ( payload.mail + timestamp ) + "|" + process.env.MERCHANT_KEY
+     formulatedString = process.env.SALT + "|" + status + "|||||||||||" + payload.email + "|" + payload.mail + "|legacyentry|" + amount + "|" + ( payload.email + timestamp ) + "|" + process.env.MERCHANT_KEY
    }
    console.log ( formulatedString )
    sha512.update ( formulatedString )
@@ -141,7 +141,7 @@ app.post ( "/payhash" , authenticateToken , ( req , res ) => {
    result = getHash ( "" , req.body.amount , payload , false )
    console.log ( "result: " , result )
    paymentHash.create ( { email: payload.email , failure: getHash ( "failure" , req.body.amount , payload , true )  , success: getHash ( "success" , req.body.amount , payload , true )} )
-   res.send  ( { payurl: 'https://secure.payu.in/_payment' , data: { key: process.env.MERCHANT_KEY , txnid: (payload.email + result [ "time" ] ), amount: req.body.amount , productinfo: "legacyentry" , firstname: payload.name , email: payload.email , phone: payload.phone_number , surl: "https://legacy-mepco.herokuapp.com/payment_status" , furl: "https://legacy-mepco.herokuapp.com/payment_status" , hash: result [ "digest" ] } } )
+   res.send  ( { payurl: 'https://secure.payu.in/_payment' , data: { key: process.env.MERCHANT_KEY , txnid: ( payload.email + result [ "time" ] ), amount: req.body.amount , productinfo: "legacyentry" , firstname: payload.name , email: payload.email , phone: payload.phone_number , surl: "https://legacy-mepco.herokuapp.com/payment_status" , furl: "https://legacy-mepco.herokuapp.com/payment_status" , hash: result [ "digest" ] } } )
 } )
 
 app.post('/loginuser',(req,res)=>{
