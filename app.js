@@ -119,7 +119,7 @@ app.post('/createuser',(req,res)=>{
         }
     } )
 });
-app.post ( "/payment_status" , ( req , res ) => {
+app.get ( "/payment_status" , ( req , res ) => {
     console.log ( req.body )
     paymentHash.find ( { email: req.body.email } , ( error , result ) => {
       if ( error )
