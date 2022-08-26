@@ -115,6 +115,8 @@ app.post ( "/payment_status" , ( req , res ) => {
           throw error
         if ( result.paymentHash == req.body.hash ) {
             User.updateOne ( { email: req.body.mail , accommodationFeesPayment: ( req.body.amount == 300 ) , regFeesPayment: true } )
+            paymentHash.delete ( {  email: req.body.mail , paymentHash: req.body.hash
+            } )
             res.redirect ( "legacy-mepco.vercel.app/paid?status=" + req.body.status )
         }
         else 
@@ -122,7 +124,7 @@ app.post ( "/payment_status" , ( req , res ) => {
     } )
 } )
 app.post ( "/payhash" , authenticateToken , ( req , res ) => {
-   let timestamp = new Date ( ).getSeconds ( )
+   let timestamp = new Date ( ).now ( )
    let string = process.env.MERCHANT_KEY + "|"  + (payload.email + timestamp) + "|" + req.body.amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
    sha512.update ( string )
    digest = sha512.digest ().toString ( 'hex' )
