@@ -30,9 +30,9 @@ app.get('/', (req,res)=>{
 function getHash ( status , amount , payload , reverse ) {
   let sha512 = require ( "crypto" ).createHash ( "sha512" )
   let timestamp = new Date ( ).getTime ( )
-  let formulatedString = process.env.MERCHANT_KEY + "|"  + (payload.email + timestamp) + "|" + amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
+  let formulatedString = process.env.MERCHANT_KEY + "|"  + (payload.email + timestamp) + "|" + amount + ".00|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
   if ( reverse ) {
-     formulatedString = process.env.SALT + "|" + status + "|||||||||||" + payload.email + "|" + payload.name + "|legacyentry|" + amount + "|" + ( payload.email + timestamp ) + "|" + process.env.MERCHANT_KEY
+     formulatedString = process.env.SALT + "|" + status + "|||||||||||" + payload.email + "|" + payload.name + "|legacyentry|" + amount + ".00|" + ( payload.email + timestamp ) + "|" + process.env.MERCHANT_KEY
    }
    console.log ( formulatedString )
    sha512.update ( formulatedString )
@@ -127,6 +127,7 @@ app.post ( "/payment_status" , ( req , res ) => {
         console.log ( "error in payment status: finding email hash" )
       else {
         if ( result [ req.body.status ] == req.body.hash ) {
+           paymentHash.findByIdAndRemove ( result._id )
            res.redirect ( "legacy-mepco.vercel.app/paid?status=" + req.body.status )
         }
         else
