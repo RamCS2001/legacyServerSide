@@ -3,7 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-sha512 = require ( "crypto" ).createHash ( "sha512" )
 var cors = require('cors');
 
 const app = express();
@@ -27,6 +26,20 @@ const paymentHash = require ( './models/PaymentHash' )
 app.get('/', (req,res)=>{
     res.send("Hello")
 });
+
+function getHash ( status , amount , payload , reverse ) {
+  let sha512 = sha512 = require ( "crypto" ).createHash ( "sha512" )
+  let timestamp = new Date ( ).getTime ( )
+  let formulatedString = process.env.MERCHANT_KEY + "|"  + (payload.email + timestamp) + "|" + amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
+    sha512.update ( string )
+   if ( reverse ) {
+     formulatedString = process.env.SALT + "|" + status + "|||||||||||" + payload.email + "|" + payload.mail + "|legacyentry|" + amount + "|" + ( payload.mail + timestamp ) + "|" + process.env.MERCHANT_KEY
+   }
+   else {
+    sha512.update ( formulatedString )
+   }
+   return reverse ? sha.digest ( ).toString ( "hex" ) : { time: timestamp , digest: sha.digest ( ).toString ( "hex" ) }
+}
 
 app.post('/createuser',(req,res)=>{
     res.setHeader("Access-Control-Allow-Origin","*");
@@ -110,37 +123,27 @@ app.post('/createuser',(req,res)=>{
     } )
 });
 app.post ( "/payment_status" , ( req , res ) => {
+    console.log ( req.body.hash )
     paymentHash.findOne ( { email: req.body.email } , ( error , result ) => {
-        if ( error )
-          throw error
-        if ( result.paymentHash == req.body.hash ) {
-            User.updateOne ( { email: req.body.email , accommodationFeesPayment: ( req.body.amount == 300 ) , regFeesPayment: true } )
-            paymentHash.remove ( {  email: req.body.email , paymentHash: req.body.hash
-            } )
-            res.redirect ( "legacy-mepco.vercel.app/paid?status=" + req.body.status )
+      if ( error )
+        console.log ( "error in payment status: finding email hash" )
+      else {
+        if ( result [ req.body.status ] == req.body.hash ) {
+           res.redirect ( "legacy-mepco.vercel.app/paid?status=" + req.body.status )
         }
-        else 
+        else
         {
-           paymentHash.remove ( {  email: req.body.email , paymentHash: req.body.hash
-            } )
-           res.send ( "alert! security breach avoid payment!" )
-           console.log ( result.paymentHash )
-           console.log ( req.body )
+           console.log ( result [ req.body.status ] )
+           res.send ( "security breach!" )
         }
+      }
     } )
 } )
 app.post ( "/payhash" , authenticateToken , ( req , res ) => {
-   let timestamp = new Date ( ).getTime ( )
-   let string = process.env.MERCHANT_KEY + "|"  + (payload.email + timestamp) + "|" + req.body.amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
-   sha512.update ( string )
-   digest = sha512.digest ().toString ( 'hex' )
-   paymentHash.create ( { email: payload.email , paymentHash: digest } , ( error , result ) => {
-    if ( error )
-      console.log ( error )
-   } )
-   sha512 = require ( "crypto" ).createHash ( "sha512" )
-
-   res.send  ( { payurl: 'https://secure.payu.in/_payment' , data: { key: process.env.MERCHANT_KEY , txnid: (payload.email + timestamp), amount: req.body.amount , productinfo: "legacyentry" , firstname: payload.name , email: payload.email , phone: payload.phone_number , surl: "https://legacy-mepco.herokuapp.com/payment_status" , furl: "https://legacy-mepco.herokuapp.com/payment_status" , hash: digest } } )
+   result = getHash ( "" , req.body.amount , payload , false )
+   paymentHash.create ( { email: payload.email , failure: getHash ( "failure" , req.body.amount , payload , true ) } )
+   paymentHash.create ( { email: payload.email , success: getHash ( "success" , req.body.amount , payload , true ) } )
+   res.send  ( { payurl: 'https://secure.payu.in/_payment' , data: { key: process.env.MERCHANT_KEY , txnid: (payload.email + result [ "time" ] ), amount: req.body.amount , productinfo: "legacyentry" , firstname: payload.name , email: payload.email , phone: payload.phone_number , surl: "https://legacy-mepco.herokuapp.com/payment_status" , furl: "https://legacy-mepco.herokuapp.com/payment_status" , hash: result [ "digest" ] } } )
 } )
 
 app.post('/loginuser',(req,res)=>{
