@@ -126,7 +126,7 @@ app.post ( "/payment_status" , ( req , res ) => {
         console.log ( "error in payment status: finding email hash" )
       else {
         if ( result [ result.length - 1 ] [ req.body.status ] == req.body.hash ) {
-           res.redirect ( "legacymepco.vercel.app/paid?status=" + req.body.status )
+           res.redirect ( "https://legacy-mepco.vercel.app/paid?status=" + req.body.status )
         }
         else
         {
@@ -141,7 +141,7 @@ app.post ( "/payhash" , authenticateToken , ( req , res ) => {
    result = getHash ( timestamp , "" , req.body.amount , payload , false )
    console.log ( "result: " , result )
    paymentHash.create ( { email: payload.email , failure: getHash ( timestamp , "failure" , req.body.amount , payload , true )  , success: getHash ( timestamp , "success" , req.body.amount , payload , true )} )
-   res.send  ( { payurl: 'https://secure.payu.in/_payment' , data: { key: process.env.MERCHANT_KEY , txnid: ( payload.email + result [ "time" ] ), amount: req.body.amount , productinfo: "legacyentry" , firstname: payload.name , email: payload.email , phone: payload.phone_number , surl: "https://legacy-mepco.herokuapp.com/payment_status" , furl: "https://legacymepco.herokuapp.com/payment_status" , hash: result [ "digest" ] } } )
+   res.send  ( { payurl: 'https://secure.payu.in/_payment' , data: { key: process.env.MERCHANT_KEY , txnid: ( payload.email + result [ "time" ] ), amount: req.body.amount , productinfo: "legacyentry" , firstname: payload.name , email: payload.email , phone: payload.phone_number , surl: "https://legacymepco.herokuapp.com/payment_status" , furl: "https://legacymepco.herokuapp.com/payment_status" , hash: result [ "digest" ] } } )
 } )
 
 app.post('/loginuser',(req,res)=>{
