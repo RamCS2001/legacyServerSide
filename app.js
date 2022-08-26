@@ -127,8 +127,12 @@ app.get ( "/payment_status" , ( req , res ) => {
       else {
         if ( result [ result.length - 1 ] [ req.body.status ] == req.body.hash ) {
            if ( req.body.status == "success" )
-             User.findOneAndUpdate ( { email: req.body.mail } , { regFeesPayment: true, accommodationFeesPayment: ( parseInt ( req.body.amount ) > 300 ) } )
-           res.redirect ( "https://legacy-mepco.vercel.app/paid?status=" + req.body.status )
+             User.findOneAndUpdate ( { email: req.body.mail } , { regFeesPayment: true, accommodationFeesPayment: ( parseInt ( req.body.amount ) > 300 ) } , (err, user)=>{
+                if(err) return err
+                else{
+                    res.redirect ( "https://legacy-mepco.vercel.app/paid?status=" + req.body.status )
+                }
+             })
         }
         else
         {
@@ -281,7 +285,9 @@ app.get('/getuserdetails',authenticateToken  ,(req,res)=>{
                 year: user.year,
                 phone_number: user.phone_number,
                 email: user.email,
-                yourEvents: yourEvents
+                yourEvents: yourEvents,
+                paid: user.regFeesPayment,
+                accPaid: user.accommodationFeesPayment
             }
             res.json({message: 1,userDetails: userDetail})
         }
@@ -769,4 +775,4 @@ app.get('/getcollegelist', (req,res)=>{
     })
 })
 const port = process.env.PORT || 5000;
-app.listen(port,()=>{ console.log("Server @ ",port)})
+app.listen(port,()=>{ console.log("Server @ ",port)})   
