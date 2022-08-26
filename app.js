@@ -127,7 +127,7 @@ app.post ( "/payment_status" , ( req , res ) => {
         if ( result [ result.length - 1 ] [ req.body.status ] == req.body.hash ) {
            if ( req.body.status == "success" )
              User.findOneAndUpdate ( { email: req.body.mail } , { regFeesPayment: true, accommodationFeesPayment: ( parseInt ( req.body.amount ) > 300 ) })
-           res.direct ( "https://legacy-mepco.vercel.app/paid?status=" + req.body.status )
+           res.redirect ( "https://legacy-mepco.vercel.app/paid?status=" + req.body.status )
         }
         else
         {
