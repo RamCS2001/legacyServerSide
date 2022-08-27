@@ -141,7 +141,6 @@ app.post ( "/payment_status" , ( req , res ) => {
         }
         else
         {
-           console.log ( result [ result.length - 1 ] [ req.body.status ] )
            res.send ( "security breach!" )
         }
       }
