@@ -445,7 +445,7 @@ app.post('/CheckAllParticipants', authenticateToken, async (req,res)=>{
     let unRegUser=[]
     let i;
     for( i=0; i<req.body.length; i++){
-        const filter={ email: req.body[i].email}
+        const filter={ email: req.body[i].email, phone_number: req.body[i].phone_number}
         let user = await User.findOne(filter)
         if(!user){
             console.log(i)
