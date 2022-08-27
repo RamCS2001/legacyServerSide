@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 var cors = require('cors');
+var nodemailer = require('nodemailer');
 
 const app = express();
 
@@ -129,7 +130,7 @@ app.post ( "/payment_status" , ( req , res ) => {
       else {
         if ( result [ result.length - 1 ] [ req.body.status ] == req.body.hash ) {
            if ( req.body.status == "success" )
-             User.findOneAndUpdate ( { email: req.body.email } , { regFeesPayment: true, accommodationFeesPayment: ( parseInt ( req.body.amount ) > 300 ) } , ( error , result ) => {
+             User.findOneAndUpdate ( { email: req.body.email } , { regFeesPayment: true, accommodationFeesPayment: ( parseInt ( req.body.amount ) > 300 ), dayoneAccomodation: ( parseInt ( req.body.amount ) == 425 ), daytwoAccomodation: ( parseInt ( req.body.amount ) == 550 )  } , ( error , result ) => {
                 if ( error )
                   throw error
                 if(result) 
@@ -776,5 +777,33 @@ app.get('/getcollegelist', (req,res)=>{
         res.json(docs)
     })
 })
+
+
+// app.post('/sendquery', (req,res)=>{
+//     console.log(req.body.queryBox)
+
+//     var transporter = nodemailer.createTransport({
+//         service: 'gmail',
+//         auth: {
+//           user: 'm.fiesta.db@gmail.com',
+//           pass: 'MepcoSchlenk2022'
+//         }
+//     });
+      
+//     var mailOptions = {
+//         from: 'm.fiesta.db@gmail.com',
+//         to: 'kram.cse.2001@gmail.com',
+//         subject: 'Legacy Query',
+//         text: req.body.queryBox
+//     };
+      
+//     transporter.sendMail(mailOptions, function(error, info){
+//         if (error) {
+//             console.log(error);
+//         } else {
+//             console.log('Email sent: ' + info.response);
+//         }
+//     });
+// })
 const port = process.env.PORT || 5000;
 app.listen(port,()=>{ console.log("Server @ ",port)})   
