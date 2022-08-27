@@ -730,9 +730,9 @@ app.get('/Grouplist', authenticateToken, (req, res)=>{
                     team["teamName"]=docs[i]["teamname"];
                     let rollNo = [];
                     for(let j=0; j<docs[i].participants.length; j++){
-                        phoneNo.push(docs[i].participants[j]["phone_number"]);
+                        emailList.push(docs[i].participants[j]["email"]);
                     }
-                    let members = await User.find({ phone_number: { $in: phoneNo } });
+                    let members = await User.find({ email: { $in: emailList } });
                     team["members"] = members;
                     team["totalMembers"]=docs[i].participants
                     responseData.push(team)
