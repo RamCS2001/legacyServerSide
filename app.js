@@ -68,9 +68,12 @@ app.post('/createuser',(req,res)=>{
             else {
                 let college_name;
                 if(req.body.college==="other"){
+                    req.body.otherCollege= req.body.otherCollege.toUpperCase()
+                    req.body.college= req.body.otherCollege
                     college_name= req.body.otherCollege;
                 }
                 else{
+                    req.body.college= req.body.college.toUpperCase()
                     college_name= req.body.college;
                 }
                 count.findOne({college: college_name}, (err,doc)=>{
