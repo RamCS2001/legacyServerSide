@@ -728,7 +728,7 @@ app.get('/Grouplist', authenticateToken, (req, res)=>{
                 for(let i=0; i<docs.length; i++){
                     let team={}
                     team["teamName"]=docs[i]["teamname"];
-                    let rollNo = [];
+                    let emailList = [];
                     for(let j=0; j<docs[i].participants.length; j++){
                         emailList.push(docs[i].participants[j]["email"]);
                     }
