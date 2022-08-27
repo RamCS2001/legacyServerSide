@@ -34,7 +34,6 @@ function getHash ( timestamp , status , amount , payload , reverse ) {
   if ( reverse ) {
      formulatedString = process.env.SALT + "|" + status + "|||||||||||" + payload.email + "|" + payload.name + "|legacyentry|" + amount + ".00|" + ( payload.email + timestamp ) + "|" + process.env.MERCHANT_KEY
    }
-   console.log ( formulatedString )
    sha512.update ( formulatedString )
    return reverse ? sha512.digest ( ).toString ( "hex" ) : { time: timestamp , digest: sha512.digest ( ).toString ( "hex" ) }
 }
@@ -142,7 +141,6 @@ app.post ( "/payment_status" , ( req , res ) => {
         }
         else
         {
-           console.log ( result [ result.length - 1 ] [ req.body.status ] )
            res.send ( "security breach!" )
         }
       }
