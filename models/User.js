@@ -46,11 +46,11 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    accommodationRequirement: {
+    dayoneAccomodation: {
         type: Boolean,
         default: false
     },
-    accommodationRequirementSubmitted: {
+    daytwoAccomodation: {
         type: Boolean,
         default: false
     },

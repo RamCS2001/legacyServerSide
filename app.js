@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 var cors = require('cors');
+var nodemailer = require('nodemailer');
 
 const app = express();
 
@@ -66,9 +67,12 @@ app.post('/createuser',(req,res)=>{
             else {
                 let college_name;
                 if(req.body.college==="other"){
+                    req.body.otherCollege= req.body.otherCollege.toUpperCase()
+                    req.body.college= req.body.otherCollege
                     college_name= req.body.otherCollege;
                 }
                 else{
+                    req.body.college= req.body.college.toUpperCase()
                     college_name= req.body.college;
                 }
                 count.findOne({college: college_name}, (err,doc)=>{
@@ -128,7 +132,7 @@ app.post ( "/payment_status" , ( req , res ) => {
       else {
         if ( result [ result.length - 1 ] [ req.body.status ] == req.body.hash ) {
            if ( req.body.status == "success" )
-             User.findOneAndUpdate ( { email: req.body.email } , { regFeesPayment: true, accommodationFeesPayment: ( parseInt ( req.body.amount ) > 300 ) } , ( error , result ) => {
+             User.findOneAndUpdate ( { email: req.body.email } , { regFeesPayment: true, accommodationFeesPayment: ( parseInt ( req.body.amount ) > 300 ), dayoneAccomodation: ( parseInt ( req.body.amount ) == 425 ), daytwoAccomodation: ( parseInt ( req.body.amount ) == 550 )  } , ( error , result ) => {
                 if ( error )
                   throw error
                 if(result) 
@@ -209,65 +213,65 @@ app.get('/getuserdetails',authenticateToken  ,(req,res)=>{
             if(user.tamildebate==1){
                 events = events + "நீயா நானா?&";
             }if(user.martialarts==1){
-                events = events + "Martial Arts&";
+                events = events + "MARTIAL ARTS&";
             }if(user.bestmanager==1){
-                events = events + "Best Manager&";
+                events = events + "BEST MANAGER&";
             }if(user.voiceoflegacy==1){
-                events = events + "Voice of Legacy&";
+                events = events + "VOICE OF LEGACY (Solo singing)&";
             }if(user.musicunplugged==1){
-                events = events + "Music Unplugged&";
+                events = events + "MUSIC UNPLUGGED (Solo Instrumental)&";
             }if(user.kavithaigal==1){
                 events = events + "கவித்திடல்&";
             }if(user.pixie==1){
-                events = events + "Pixie&";
+                events = events + "PIXIE (PHOTO CONTEST)&";
             }if(user.yoga==1){
-                events = events + "Yoga&";
+                events = events + "YOGA&";
             }if(user.debateguru==1){
-                events = events + "Debate Guru&";
+                events = events + "DEBATE GURU&";
             }if(user.makeyourmove==1){
-                events = events + "Make Your Move&";
+                events = events + "MAKE YOUR MOVE (Solo Dance)&";
             }if(user.extempore==1){
-                events = events + "Extempore&";
+                events = events + "EXTEMPORE&";
             }if(user.pencilsketching==1){
-                events = events + "Pencil Sketching&";
+                events = events + "PENCIL SKETCHING&";
             }if(user.symphonique==1){
-                events = events + "Symphonique&";
+                events = events + "SYMPHONIQUE (Orchestra)&";
             }if(user.divideandconquer==1){
-                events = events + "Divide and Conquer&";
+                events = events + "DIVIDE AND CONQUER (MULTITASKING)&";
             }if(user.monstersmuss==1){   
-                events = events + "Monsters' Muss&";
+                events = events + "MONSTERS’ MUSS (English Language Game)&";
             }if(user.kalakkalkalatta==1){   
-                events = events + "Kalakkal Kalatta&";
+                events = events + "KALAKKAL KALATTA&";
             }if(user.sherlockholmes==1){   
-                events = events + "Sherlock Holmes&";
+                events = events + "SHERLOCK HOLMES&";
             }if(user.quizzards==1){   
-                events = events + "Quizzards&";
+                events = events + "QUIZZARDS (QUIZ)&";
             }if(user.rangoli==1){   
-                events = events + "Rangoli&";
+                events = events + "RANGOLI&";
             }if(user.graphix==1){   
-                events = events + "Graphix&";
+                events = events + "GRAPHIX (TRAILER TIME)&";
             }if(user.choreoboom==1){   
-                events = events + "Choreo Boom&";
+                events = events + "CHOREO BOOM (Group Dance)&";
             }if(user.ideapresentation==1){   
-                events = events + "Idea Presentation&";
+                events = events + "IDEA PRESENTATION&";
             }if(user.marketomania==1){   
-                events = events + "Marketomania&";
+                events = events + "MARKETOMANIA&";
             }if(user.dramatics==1){   
-                events = events + "Dramatics&";
+                events = events + "DRAMATICS&";
             }if(user.cinematrix==1){   
-                events = events + "Cinematrix (Short Flim)&";
+                events = events + "CINEMATRIX (SHORT FILM)&";
             }if(user.liphomaniac==1){   
-                events = events + "Liphomaniac&";
+                events = events + "LIPHOMANIAC (SPELL BEE)&";
             }if(user.expressions==1){   
-                events = events + "Expressions&";
+                events = events + "EXPRESSIONS (FACE PAINTING)&";
             }if(user.treasurehunt==1){
-                events = events + "Treasure hunt&";
+                events = events + "TREASURE HUNT&";
             }if(user.warwithwords==1){   
-                events = events + "War with Words&";
+                events = events + "WAR WITH WORDS&";
             }if(user.translation==1){   
-                events = events + "Translation&";
+                events = events + "மறுவார்த்தை (Translation)&";
             }if(user.lyricalhunt==1){   
-                events = events + "Lyrical Hunt&";
+                events = events + "LYRICAL HUNT&";
             }
             let replaced= events.replace(/&/g, ",");
             let yourEvents= replaced.replace(/.$/,".")
@@ -443,7 +447,7 @@ app.post('/CheckAllParticipants', authenticateToken, async (req,res)=>{
     let unRegUser=[]
     let i;
     for( i=0; i<req.body.length; i++){
-        const filter={ email: req.body[i].email}
+        const filter={ email: req.body[i].email, phone_number: req.body[i].phone_number}
         let user = await User.findOne(filter)
         if(!user){
             console.log(i)
@@ -726,13 +730,12 @@ app.get('/Grouplist', authenticateToken, (req, res)=>{
                 for(let i=0; i<docs.length; i++){
                     let team={}
                     team["teamName"]=docs[i]["teamname"];
-                    let rollNo = [];
+                    let emailList = [];
                     for(let j=0; j<docs[i].participants.length; j++){
-                        phoneNo.push(docs[i].participants[j]["phone_number"]);
+                        emailList.push(docs[i].participants[j]["email"]);
                     }
-                    let members = await User.find({ phone_number: { $in: phoneNo } });
+                    let members = await User.find({ email: { $in: emailList } });
                     team["members"] = members;
-                    team["totalMembers"]=docs[i].participants
                     responseData.push(team)
                 }
                 res.json({message: 1, data: responseData})
@@ -775,5 +778,33 @@ app.get('/getcollegelist', (req,res)=>{
         res.json(docs)
     })
 })
+
+
+// app.post('/sendquery', (req,res)=>{
+//     console.log(req.body.queryBox)
+
+//     var transporter = nodemailer.createTransport({
+//         service: 'gmail',
+//         auth: {
+//           user: 'm.fiesta.db@gmail.com',
+//           pass: 'MepcoSchlenk2022'
+//         }
+//     });
+      
+//     var mailOptions = {
+//         from: 'm.fiesta.db@gmail.com',
+//         to: 'kram.cse.2001@gmail.com',
+//         subject: 'Legacy Query',
+//         text: req.body.queryBox
+//     };
+      
+//     transporter.sendMail(mailOptions, function(error, info){
+//         if (error) {
+//             console.log(error);
+//         } else {
+//             console.log('Email sent: ' + info.response);
+//         }
+//     });
+// })
 const port = process.env.PORT || 5000;
 app.listen(port,()=>{ console.log("Server @ ",port)})   
