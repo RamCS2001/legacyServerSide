@@ -211,65 +211,65 @@ app.get('/getuserdetails',authenticateToken  ,(req,res)=>{
             if(user.tamildebate==1){
                 events = events + "நீயா நானா?&";
             }if(user.martialarts==1){
-                events = events + "Martial Arts&";
+                events = events + "MARTIAL ARTS&";
             }if(user.bestmanager==1){
-                events = events + "Best Manager&";
+                events = events + "BEST MANAGER&";
             }if(user.voiceoflegacy==1){
-                events = events + "Voice of Legacy&";
+                events = events + "VOICE OF LEGACY (Solo singing)&";
             }if(user.musicunplugged==1){
-                events = events + "Music Unplugged&";
+                events = events + "MUSIC UNPLUGGED (Solo Instrumental)&";
             }if(user.kavithaigal==1){
                 events = events + "கவித்திடல்&";
             }if(user.pixie==1){
-                events = events + "Pixie&";
+                events = events + "PIXIE (PHOTO CONTEST)&";
             }if(user.yoga==1){
-                events = events + "Yoga&";
+                events = events + "YOGA&";
             }if(user.debateguru==1){
-                events = events + "Debate Guru&";
+                events = events + "DEBATE GURU&";
             }if(user.makeyourmove==1){
-                events = events + "Make Your Move&";
+                events = events + "MAKE YOUR MOVE (Solo Dance)&";
             }if(user.extempore==1){
-                events = events + "Extempore&";
+                events = events + "EXTEMPORE&";
             }if(user.pencilsketching==1){
-                events = events + "Pencil Sketching&";
+                events = events + "PENCIL SKETCHING&";
             }if(user.symphonique==1){
-                events = events + "Symphonique&";
+                events = events + "SYMPHONIQUE (Orchestra)&";
             }if(user.divideandconquer==1){
-                events = events + "Divide and Conquer&";
+                events = events + "DIVIDE AND CONQUER (MULTITASKING)&";
             }if(user.monstersmuss==1){   
-                events = events + "Monsters' Muss&";
+                events = events + "MONSTERS’ MUSS (English Language Game)&";
             }if(user.kalakkalkalatta==1){   
-                events = events + "Kalakkal Kalatta&";
+                events = events + "KALAKKAL KALATTA&";
             }if(user.sherlockholmes==1){   
-                events = events + "Sherlock Holmes&";
+                events = events + "SHERLOCK HOLMES&";
             }if(user.quizzards==1){   
-                events = events + "Quizzards&";
+                events = events + "QUIZZARDS (QUIZ)&";
             }if(user.rangoli==1){   
-                events = events + "Rangoli&";
+                events = events + "RANGOLI&";
             }if(user.graphix==1){   
-                events = events + "Graphix&";
+                events = events + "GRAPHIX (TRAILER TIME)&";
             }if(user.choreoboom==1){   
-                events = events + "Choreo Boom&";
+                events = events + "CHOREO BOOM (Group Dance)&";
             }if(user.ideapresentation==1){   
-                events = events + "Idea Presentation&";
+                events = events + "IDEA PRESENTATION&";
             }if(user.marketomania==1){   
-                events = events + "Marketomania&";
+                events = events + "MARKETOMANIA&";
             }if(user.dramatics==1){   
-                events = events + "Dramatics&";
+                events = events + "DRAMATICS&";
             }if(user.cinematrix==1){   
-                events = events + "Cinematrix (Short Flim)&";
+                events = events + "CINEMATRIX (SHORT FILM)&";
             }if(user.liphomaniac==1){   
-                events = events + "Liphomaniac&";
+                events = events + "LIPHOMANIAC (SPELL BEE)&";
             }if(user.expressions==1){   
-                events = events + "Expressions&";
+                events = events + "EXPRESSIONS (FACE PAINTING)&";
             }if(user.treasurehunt==1){
-                events = events + "Treasure hunt&";
+                events = events + "TREASURE HUNT&";
             }if(user.warwithwords==1){   
-                events = events + "War with Words&";
+                events = events + "WAR WITH WORDS&";
             }if(user.translation==1){   
-                events = events + "Translation&";
+                events = events + "மறுவார்த்தை (Translation)&";
             }if(user.lyricalhunt==1){   
-                events = events + "Lyrical Hunt&";
+                events = events + "LYRICAL HUNT&";
             }
             let replaced= events.replace(/&/g, ",");
             let yourEvents= replaced.replace(/.$/,".")
