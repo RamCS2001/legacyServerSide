@@ -734,7 +734,6 @@ app.get('/Grouplist', authenticateToken, (req, res)=>{
                     }
                     let members = await User.find({ email: { $in: emailList } });
                     team["members"] = members;
-                    team["totalMembers"]=docs[i].participants
                     responseData.push(team)
                 }
                 res.json({message: 1, data: responseData})
