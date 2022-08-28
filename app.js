@@ -141,7 +141,7 @@ app.post ( "/payment_status" , ( req , res ) => {
         }
         else
         {
-           res.send ( "security breach!" )
+           res.redirect ( "https://legacy-mepco.vercel.app/paid?status=breach" )
         }
       }
     } )
