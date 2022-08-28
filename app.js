@@ -25,7 +25,7 @@ const collegeEvents = require('./models/collegeEvents');
 const paymentHash = require ( './models/PaymentHash' )
 
 app.get('/', (req,res)=>{
-    res.send("Hello")
+    res.send("Hello World")
 });
 
 function getHash ( timestamp , status , amount , payload , reverse ) {
@@ -140,9 +140,7 @@ app.post ( "/payment_status" , ( req , res ) => {
              } )
         }
         else
-        {
            res.redirect ( "https://legacy-mepco.vercel.app/paid?status=breach" )
-        }
       }
     } )
 } )
