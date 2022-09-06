@@ -691,7 +691,7 @@ app.get('/Individuallist', authenticateToken, (req, res)=>{
         if(req.query.event=='10'){
             filter={extempore : 1}
         }
-        if(req.body.event=='11'){
+        if(req.query.event=='11'){
             filter={pencilsketching : 1}
         }
         User.find(filter,function (err, docs){
