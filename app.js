@@ -407,10 +407,10 @@ app.post('/participate', authenticateToken, async function (req,res){
                         eventToUpdate={makeyourmove : currentCount+1}
                     }
                     if(req.body.serverName=="extempore"){
-                        eventToUpdate={extempore  : currentCount+1}
+                        eventToUpdate={extempore : currentCount+1}
                     }
-                    if(req.body.serverName=="pencilsketching "){
-                        eventToUpdate={pencilsketching   : currentCount+1}
+                    if(req.body.serverName=="pencilsketching"){
+                        eventToUpdate={pencilsketching : currentCount+1}
                     }
                     collegeEvents.findByIdAndUpdate(clg._id, eventToUpdate, (err, newClg)=>{
                         if(err) return err;
