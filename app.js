@@ -653,9 +653,7 @@ app.post('/participates', authenticateToken, (req, res)=>{
 })
 
 app.get('/Individuallist', authenticateToken, (req, res)=>{
-    console.log ( req.query.event )
     if(payload.phone_number!="9486030044"){
-        console.log ( payload )
         res.json({message: -1});
     }   
     else{
@@ -694,14 +692,13 @@ app.get('/Individuallist', authenticateToken, (req, res)=>{
             filter={extempore : 1}
         }
         if(req.body.event=='11'){
-            filter= {pencilsketching: 1}
+            filter= {pencilsketching : 1}
         }
         User.find(filter,function (err, docs){
             if(err){
                 console.log(err)
                 return
             }
-            console.log(docs)
             if(docs){
                 res.json({message: 1,data: docs})
             }
