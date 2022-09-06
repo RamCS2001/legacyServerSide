@@ -361,7 +361,7 @@ app.post('/participate', authenticateToken, async function (req,res){
         update={$set: {extempore : 1}}
     }
     if(req.body.event=='11'){
-        update={$set: {pencilsketching  : 1}}
+        update={$set: {pencilsketching : 1}}
     }
 
     User.findOneAndUpdate(filter, update, function (err, docs){
