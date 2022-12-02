@@ -29,6 +29,7 @@ app.get('/', (req,res)=>{
 });
 
 function getHash ( timestamp , status , amount , payload , reverse ) {
+    return;
   let sha512 = require ( "crypto" ).createHash ( "sha512" )
   let formulatedString = process.env.MERCHANT_KEY + "|"  + (payload.email + timestamp) + "|" + amount + "|legacyentry|" + payload.name + "|" + payload.email + "|||||||||||" + process.env.SALT
   if ( reverse ) {
@@ -39,6 +40,8 @@ function getHash ( timestamp , status , amount , payload , reverse ) {
 }
 
 app.post('/createuser',(req,res)=>{
+    res.json({"message" : "Server Closed", "code": -1});
+    return;
     res.setHeader("Access-Control-Allow-Origin","*");
     let email = req.body.email
     let phone_number = req.body.phone_number
@@ -123,6 +126,8 @@ app.post('/createuser',(req,res)=>{
     } )
 });
 app.post ( "/payment_status" , ( req , res ) => {
+    res.json({"message" : "Server Closed", "code": -1});
+    return;
     paymentHash.find ( { email: req.body.email } , ( error , result ) => {
       if ( error )
       {
@@ -145,7 +150,9 @@ app.post ( "/payment_status" , ( req , res ) => {
     } )
 } )
 app.post ( "/payhash" , authenticateToken , ( req , res ) => {
-   let timestamp = new Date ( ).getTime ( )
+    res.json({"message" : "Server Closed", "code": -1});
+    return;
+    let timestamp = new Date ( ).getTime ( )
    result = getHash ( timestamp , "" , req.body.amount , payload , false )
    console.log ( "result: " , result )
    paymentHash.create ( { email: payload.email , failure: getHash ( timestamp , "failure" , req.body.amount , payload , true )  , success: getHash ( timestamp , "success" , req.body.amount , payload , true )} )
@@ -314,6 +321,8 @@ function authenticateToken(req, res, next) {
 
 
 app.post('/participate', authenticateToken, async function (req,res){
+    res.json({"message" : "Server Closed", "code": -1});
+    return;
     mail= payload.email;
     phoneNo= payload.phone_number;
 
@@ -477,6 +486,9 @@ app.post('/CheckAllParticipants', authenticateToken, async (req,res)=>{
 })
 
 app.post('/participates', authenticateToken, (req, res)=>{
+
+    res.json({"message" : "Server Closed", "code": -1});
+    return;
     let obj={exist: 0}
     req.body.teamname = req.body.teamname.toUpperCase();
 
